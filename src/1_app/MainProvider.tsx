@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { PropsWithChildren } from "react"
 import { Toaster } from "react-hot-toast";
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import Router from "./Router";
 
 const theme = createTheme({
     palette: {
@@ -34,6 +35,7 @@ export default function MainProvider({children}: PropsWithChildren) {
     <>
       <Toaster/>
       <QueryClientProvider client={queryClient}>
+        <Router/>
         <ThemeProvider theme={theme}>
           {children}
         </ThemeProvider>
