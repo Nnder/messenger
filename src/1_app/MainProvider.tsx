@@ -1,4 +1,4 @@
-import {ThemeProvider, createTheme } from "@mui/material"
+import {Box, ThemeProvider, createTheme } from "@mui/material"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { PropsWithChildren } from "react"
 import { Toaster } from "react-hot-toast";
@@ -35,10 +35,14 @@ export default function MainProvider({children}: PropsWithChildren) {
     <>
       <Toaster/>
       <QueryClientProvider client={queryClient}>
-        <Router/>
         <ThemeProvider theme={theme}>
-          {children}
+          <Box sx={{display: 'grid', gridTemplateColumns: 'auto 1fr'}}>
+            {children}
+            <Router/>
+          </Box>
+          
         </ThemeProvider>
+        
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </>

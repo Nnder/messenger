@@ -1,9 +1,9 @@
-import { createBrowserRouter, RouterProvider, } from "react-router-dom";
+import { createBrowserRouter, Outlet, RouterProvider, } from "react-router-dom";
 
 const router = createBrowserRouter([
     {
       path: "/",
-      element: <div>Hello world!</div>,
+      element: <div>hello <Outlet/></div>,
       errorElement: <div>Error</div>,
       // loader: <div>...Loading</div>,
       children: [
