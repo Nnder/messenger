@@ -1,5 +1,6 @@
 import { createBrowserRouter, RouterProvider, } from "react-router-dom";
 import MainPage from "../2_pages/MainPage";
+import NotFount from "../2_pages/Error/NotFount";
 
 const router = createBrowserRouter([
     {
@@ -24,7 +25,7 @@ const router = createBrowserRouter([
     },
     {
       path: "*",
-      element: <div>Error 404</div>,
+      element: <NotFount/>,
     }
   ]);
 

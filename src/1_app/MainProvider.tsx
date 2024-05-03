@@ -34,7 +34,7 @@ const queryClient = new QueryClient()
 export default function MainProvider({children}: PropsWithChildren) {
   return (
     <>
-      <Toaster/>
+      <Toaster position="top-right"/>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={theme}>
           <Box sx={{display: {xs:'block', sm:'grid'}, gridTemplateColumns: 'auto 1fr'}}>
