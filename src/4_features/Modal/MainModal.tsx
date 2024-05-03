@@ -1,5 +1,5 @@
-import { Box, IconButton, Modal } from "@mui/material";
-import { useState } from "react";
+import { Box, IconButton, Modal } from '@mui/material';
+import { useState } from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
 
 export default function MainModal() {
@@ -9,28 +9,31 @@ export default function MainModal() {
   return (
     <>
       <IconButton
-                size="large"
-                edge="start"
-                color="inherit"
-                aria-label="menu"
-                sx={{ m: 0.5, width: "20%"}}
-                onClick={handleOpen}
-              >
-          <MenuIcon />
-        </IconButton>
+        size="large"
+        edge="start"
+        color="inherit"
+        aria-label="menu"
+        sx={{ m: 0.5, width: '20%' }}
+        onClick={handleOpen}
+      >
+        <MenuIcon />
+      </IconButton>
 
       <Modal
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
       >
-        <Box sx={{width:{xs:'60vw', sm:'35vw'}, height:'100vh', background:' black', p:4}}>
+        <Box sx={{
+          width: { xs: '60vw', sm: '35vw' }, height: '100vh', background: ' black', p: 4,
+        }}
+        >
           <Box>
             Modal
           </Box>
         </Box>
       </Modal>
     </>
-  )
+  );
 }
