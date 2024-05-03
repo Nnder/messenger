@@ -1,9 +1,10 @@
-import { createBrowserRouter, Outlet, RouterProvider, } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, } from "react-router-dom";
+import MainPage from "../2_pages/MainPage";
 
 const router = createBrowserRouter([
     {
       path: "/",
-      element: <div>hello <Outlet/></div>,
+      element: <MainPage/>,
       errorElement: <div>Error</div>,
       // loader: <div>...Loading</div>,
       children: [

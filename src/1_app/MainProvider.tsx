@@ -4,6 +4,7 @@ import { PropsWithChildren } from "react"
 import { Toaster } from "react-hot-toast";
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import Router from "./Router";
+import Navbar from "../3_widget/Navbar/Navbar";
 
 const theme = createTheme({
     palette: {
@@ -36,7 +37,8 @@ export default function MainProvider({children}: PropsWithChildren) {
       <Toaster/>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={theme}>
-          <Box sx={{display: 'grid', gridTemplateColumns: 'auto 1fr'}}>
+          <Box sx={{display: {xs:'block', sm:'grid'}, gridTemplateColumns: 'auto 1fr'}}>
+            <Navbar/>
             {children}
             <Router/>
           </Box>
