@@ -1,8 +1,11 @@
-import { Folder } from '@mui/icons-material';
-import { Button } from '@mui/material';
-import { PropsWithChildren } from 'react';
+import { Folder } from "@mui/icons-material";
+import { Button } from "@mui/material";
+import { PropsWithChildren } from "react";
 
-export default function ButtonFolder({ children, ...props }: PropsWithChildren) {
+export default function ButtonFolder({
+  children,
+  ...props
+}: PropsWithChildren) {
   return (
     <Button
       variant="contained"
@@ -12,12 +15,12 @@ export default function ButtonFolder({ children, ...props }: PropsWithChildren) 
         m: 0,
         width: 1,
         fontSize: 13,
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        textAlign: 'center',
-        textTransform: 'none',
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        textAlign: "center",
+        textTransform: "none",
       }}
       {...props}
     >
