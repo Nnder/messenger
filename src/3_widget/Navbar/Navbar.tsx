@@ -19,7 +19,7 @@ export default function Navbar() {
   // const theme = useTheme();
 
   return (
-    <Box sx={{width: {xs: "100vw", sm: "30vw"}, maxWidth: {xs:'100vw',md: '300px'}, background: 'black', height: "100vh", display: 'grid', gridTemplateRows: '56px 1fr'}}>
+    <Box sx={{width: {xs: "100vw", sm: "30vw"}, maxWidth: {xs:'100vw',md: '300px'}, background: 'black', height: "100vh", display: 'grid', gridTemplateRows: '56px 1fr', position:{xs: 'absolute', sm:'initial'}}}>
       <Box sx={{display: 'flex', justifyContent: 'flex-start', alignItems: 'center'}}>
         <IconButton
                 size="large"
