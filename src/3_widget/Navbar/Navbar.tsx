@@ -1,23 +1,22 @@
-import { AppBar, Box, Button, IconButton, Input, Menu, MenuItem, Toolbar, Typography } from "@mui/material";
+import {Box, Button, IconButton, Input} from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import {Folder} from '@mui/icons-material';
-import Fade from '@mui/material/Fade';
-import { Link } from "react-router-dom";
 import { useState } from "react";
-import { useTheme } from "@emotion/react";
+// import { useTheme } from "@emotion/react";
 
 export default function Navbar() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
+  // const open = Boolean(anchorEl);
+  console.log(anchorEl)
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  // const handleClose = () => {
+  //   setAnchorEl(null);
+  // };
 
-  const theme = useTheme();
+  // const theme = useTheme();
 
   return (
     <Box sx={{width: {xs: "100vw", sm: "30vw"}, maxWidth: {xs:'100vw',md: '300px'}, background: 'black', height: "100vh", display: 'grid', gridTemplateRows: '56px 1fr'}}>
@@ -57,40 +56,50 @@ export default function Navbar() {
           </Typography> */}
         </Box>
 
-        <Box sx={{display: {xs:'flex' ,sm:'flex', md:'none'},  width: '30vw', background: '#201E1F', height: '36px', overflow: 'auto'}}>
+        <Box sx={{display: {xs:'flex' ,sm:'flex', md:'none'},  width: {xs:'100vw',sm:'30vw'}, background: '#201E1F', height: '56px', overflow: 'auto'}}>
           {/* <Typography sx={{ fontSize: 13, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems:'center'}} textAlign='center'> */}
           <Button variant="contained" 
-          sx={{p: 0, py:1, m:0, width:1, fontSize: 13, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems:'center', textAlign: 'center', textTransform: 'none'}}>
+          sx={{minWidth:'100px', borderRadius:0, p:0.5, m:0, lineHeight: 1.3, fontSize: 13, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems:'center', textTransform: 'none'}}>
             Все чаты
           </Button>
 
           <Button variant="contained" 
-          sx={{p: 0, py:1, m:0, width:1, fontSize: 13, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems:'center', textAlign: 'center', textTransform: 'none'}}>
-            Личное
+          sx={{minWidth:'100px', borderRadius:0, p:0.5, m:0, fontSize: 13, lineHeight: 1.3, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems:'center', textTransform: 'none'}}>
+            Личноеwdawd
           </Button>
 
-
-
           <Button variant="contained" 
-          sx={{p: 0, py:1, m:0, width:1, fontSize: 13, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems:'center', textAlign: 'center', textTransform: 'none'}}>
+          sx={{minWidth:'100px', borderRadius:0,  p:0.5, m:0, fontSize: 13, lineHeight: 1.3, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems:'center', textTransform: 'none'}}>
             Личное
           </Button>
           <Button variant="contained" 
-          sx={{p: 0, py:1, m:0, width:1, fontSize: 13, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems:'center', textAlign: 'center', textTransform: 'none'}}>
+          sx={{minWidth:'100px', borderRadius:0, p:0.5, m:0, fontSize: 13, lineHeight: 1.3, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems:'center', textTransform: 'none'}}>
             Личное
           </Button>
           <Button variant="contained" 
-          sx={{p: 0, py:1, m:0, width:1, fontSize: 13, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems:'center', textAlign: 'center', textTransform: 'none'}}>
+          sx={{minWidth:'100px', borderRadius:0, p:0.5, m:0, fontSize: 13, lineHeight: 1.3, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems:'center', textTransform: 'none'}}>
             Личное
           </Button>
           <Button variant="contained" 
-          sx={{p: 0, py:1, m:0, width:1, fontSize: 13, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems:'center', textAlign: 'center', textTransform: 'none'}}>
+          sx={{minWidth:'100px', borderRadius:0, p:0.5, m:0, fontSize: 13, lineHeight: 1.3, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems:'center', textTransform: 'none'}}>
             Личное
           </Button>
-
-          
-
-          
+          <Button variant="contained" 
+          sx={{minWidth:'100px', borderRadius:0, p:0.5, m:0, fontSize: 13, lineHeight: 1.3, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems:'center', textTransform: 'none'}}>
+            Личное
+          </Button>
+          <Button variant="contained" 
+          sx={{minWidth:'100px', borderRadius:0, p:0.5, m:0, fontSize: 13, lineHeight: 1.3, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems:'center', textTransform: 'none'}}>
+            Личное
+          </Button>
+          <Button variant="contained" 
+          sx={{minWidth:'100px', borderRadius:0, p:0.5, m:0, fontSize: 13, lineHeight: 1.3, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems:'center', textTransform: 'none'}}>
+            Личное
+          </Button>
+          <Button variant="contained" 
+          sx={{minWidth:'100px', borderRadius:0, p:0.5, m:0, fontSize: 13, lineHeight: 1.3, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems:'center', textTransform: 'none'}}>
+            Личное
+          </Button>
             
           {/* </Typography> */}
           {/* <Typography sx={{ fontSize: 13, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems:'center'}} textAlign='center'>
@@ -99,7 +108,7 @@ export default function Navbar() {
           </Typography> */}
         </Box>
         <Box sx={{width: {sm: '100%', md:'75%'}, height: 'calc(100vh - 56px)', overflow: 'auto'}}>
-          <Button variant="contained" sx={{width: 1, borderRadius: 0}} href="/">
+          <Button variant="contained" sx={{width: 1, borderRadius: 0, textAlign: 'start'}} href="/">
             1
           </Button>
           <Button variant="contained" sx={{width: 1, borderRadius: 0}} href="/friends">1</Button>
