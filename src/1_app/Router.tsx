@@ -7,7 +7,7 @@ const router = createBrowserRouter([
       path: "/",
       element: <MainPage/>,
       errorElement: <div>Error</div>,
-      // loader: <div>...Loading</div>,
+      // loader: true,
       children: [
         {
           path: "friends",
