@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import MainPage from "../2_pages/MainPage";
 import NotFount from "../2_pages/Error/NotFount";
+import SignIn from "../2_pages/Sign/SignIn";
 
 const router = createBrowserRouter([
   {
@@ -24,8 +25,14 @@ const router = createBrowserRouter([
     ],
   },
   {
+    path: "/SignIn",
+    element: <SignIn />,
+    errorElement: <div>Error</div>,
+  },
+  {
     path: "*",
     element: <NotFount />,
+    errorElement: <div>Error</div>,
   },
 ]);
 
