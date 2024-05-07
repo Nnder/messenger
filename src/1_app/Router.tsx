@@ -2,11 +2,17 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import MainPage from "../2_pages/MainPage";
 import NotFount from "../2_pages/Error/NotFount";
 import SignIn from "../2_pages/Sign/SignIn";
+import Navbar from "../3_widget/Navbar/Navbar";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <MainPage />,
+    element: (
+      <>
+        <Navbar />
+        <MainPage />
+      </>
+    ),
     errorElement: <div>Error</div>,
     // loader: true,
     children: [
@@ -31,7 +37,12 @@ const router = createBrowserRouter([
   },
   {
     path: "*",
-    element: <NotFount />,
+    element: (
+      <>
+        <Navbar />
+        <NotFount />
+      </>
+    ),
     errorElement: <div>Error</div>,
   },
 ]);

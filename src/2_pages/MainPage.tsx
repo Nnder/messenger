@@ -1,7 +1,6 @@
 import { Outlet } from "react-router-dom";
 import { Box, Typography } from "@mui/material";
 import usePathname from "../6_shared/hooks/usePathname";
-import Navbar from "../3_widget/Navbar/Navbar";
 
 export default function MainPage() {
   const path = usePathname();
@@ -11,7 +10,6 @@ export default function MainPage() {
   if (path === "/") {
     return (
       <>
-        <Navbar />
         <Box
           sx={{
             display: "flex",
@@ -29,5 +27,9 @@ export default function MainPage() {
     );
   }
 
-  return <Outlet />;
+  return (
+    <>
+      <Outlet />
+    </>
+  );
 }

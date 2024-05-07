@@ -4,7 +4,7 @@ import { PropsWithChildren } from "react";
 import { Toaster } from "react-hot-toast";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Router from "./Router";
-import Session from "./Session";
+import AuthProvider from "./AuthProvider";
 
 const theme = createTheme({
   palette: {
@@ -37,7 +37,7 @@ export default function MainProvider({ children }: PropsWithChildren) {
       <Toaster position="top-right" />
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={theme}>
-          <Session>
+          <AuthProvider>
             <Box
               sx={{
                 display: { xs: "block", sm: "grid" },
@@ -47,7 +47,7 @@ export default function MainProvider({ children }: PropsWithChildren) {
               {children}
               <Router />
             </Box>
-          </Session>
+          </AuthProvider>
         </ThemeProvider>
 
         <ReactQueryDevtools initialIsOpen={false} />
