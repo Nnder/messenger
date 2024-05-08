@@ -1,6 +1,7 @@
 import { Box, IconButton, Modal } from "@mui/material";
 import { useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
+import logout from "../../6_shared/firebase/SignOut/SignOut";
 
 export default function MainModal() {
   const [open, setOpen] = useState(false);
@@ -33,7 +34,11 @@ export default function MainModal() {
             p: 4,
           }}
         >
-          <Box>Modal</Box>
+          <Box>
+            <Box>
+              <button onClick={logout}>Выйти</button>
+            </Box>
+          </Box>
         </Box>
       </Modal>
     </>

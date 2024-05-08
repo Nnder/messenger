@@ -14,8 +14,14 @@ export default function AuthProvider({
       if (`${origin}/SignIn` !== window.location.href) {
         //`${origin}/SignUp` !== window.location.href
         //console.log(`${origin}/SignIn` !== window.location.href)
-        window.location.href = `${origin}/SignIn`;
+        // window.location.href = `${origin}/SignIn`;
       }
+    }
+
+    if (user) {
+      console.log("Вы авторизованы");
+    } else {
+      console.log("Вы не авторизованы");
     }
   }, [user, loading]);
 
