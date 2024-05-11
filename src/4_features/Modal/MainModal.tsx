@@ -36,7 +36,9 @@ export default function MainModal() {
         >
           <Box>
             <Box>
-              <Button onClick={logout}>Выйти</Button>
+              <Button variant="contained" onClick={logout}>
+                Выйти
+              </Button>
             </Box>
           </Box>
         </Box>
