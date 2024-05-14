@@ -1,11 +1,28 @@
-import { Box } from "@mui/material";
-import { useParams } from "react-router-dom";
+import { Box, Button, Typography } from "@mui/material";
+import { useNavigate, useParams } from "react-router-dom";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 export const Chat = () => {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   let { id } = useParams();
   return (
     <Box>
+      <Box
+        sx={{
+          width: 1,
+          background: "#000000",
+          display: "flex",
+          justifyContent: "flex-start",
+          alignItems: "center",
+        }}
+      >
+        <Button onClick={() => navigate(-1)}>
+          <ArrowBackIcon />
+        </Button>
+        <Box>
+          <Typography>Chat name</Typography>
+        </Box>
+      </Box>
       <div>Chat {id}</div>
     </Box>
   );

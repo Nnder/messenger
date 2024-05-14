@@ -107,23 +107,28 @@ export default function Navbar() {
             overflow: "auto",
           }}
         >
-          <ChatItem href="/">1</ChatItem>
-          <ChatItem href="/friends">1</ChatItem>
-          <ChatItem href="/chats">1</ChatItem>
-          <ChatItem href="/settings">1</ChatItem>
-
-          <ChatItem href="/">1</ChatItem>
-          <ChatItem href="/friends">1</ChatItem>
-          <ChatItem href="/chats">1</ChatItem>
-          <ChatItem href="/settings">1</ChatItem>
-          <ChatItem href="/">1</ChatItem>
-          <ChatItem href="/friends">1</ChatItem>
-          <ChatItem href="/chats">1</ChatItem>
-          <ChatItem href="/settings">1</ChatItem>
-          <ChatItem href="/">1</ChatItem>
-          <ChatItem href="/friends">1</ChatItem>
-          <ChatItem href="/chats">1</ChatItem>
-          <ChatItem href="/settings">1</ChatItem>
+          <ChatItem href="/chat/1">1</ChatItem>
+          <ChatItem href="/chat/1">1</ChatItem>
+          <ChatItem href="/chat/1">1</ChatItem>
+          <ChatItem href="/chat/1">1</ChatItem>
+          <ChatItem href="/chat/1">1</ChatItem>
+          <ChatItem href="/chat/1">1</ChatItem>
+          <ChatItem href="/chat/1">1</ChatItem>
+          <ChatItem href="/chat/1">1</ChatItem>
+          <ChatItem href="/chat/1">1</ChatItem>
+          <ChatItem href="/chat/1">1</ChatItem>
+          <ChatItem href="/chat/1">1</ChatItem>
+          <ChatItem href="/chat/1">1</ChatItem>
+          <ChatItem href="/chat/1">1</ChatItem>
+          <ChatItem href="/chat/1">1</ChatItem>
+          <ChatItem href="/chat/1">1</ChatItem>
+          <ChatItem href="/chat/1">1</ChatItem>
+          <ChatItem href="/chat/1">1</ChatItem>
+          <ChatItem href="/chat/1">1</ChatItem>
+          <ChatItem href="/chat/1">1</ChatItem>
+          <ChatItem href="/chat/1">1</ChatItem>
+          <ChatItem href="/chat/1">1</ChatItem>
+          <ChatItem href="/chat/1">1</ChatItem>
         </Box>
       </Box>
     </Box>

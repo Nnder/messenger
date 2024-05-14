@@ -65,17 +65,17 @@ export default function MainProvider({ children }: PropsWithChildren) {
       <Toaster position="top-right" />
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={theme}>
-          <AuthProvider>
-            <Box
-              sx={{
-                display: { xs: "block", sm: "grid" },
-                gridTemplateColumns: "auto 1fr",
-              }}
-            >
-              {children}
-              <Router />
-            </Box>
-          </AuthProvider>
+          {/* <AuthProvider> */}
+          <Box
+            sx={{
+              display: { xs: "block", sm: "grid" },
+              gridTemplateColumns: "auto 1fr",
+            }}
+          >
+            {children}
+            <Router />
+          </Box>
+          {/* </AuthProvider> */}
         </ThemeProvider>
 
         <ReactQueryDevtools initialIsOpen={false} />

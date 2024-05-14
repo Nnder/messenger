@@ -11,8 +11,6 @@ export const useUserStore = create<UserStore>((set) => ({
   provider: "",
   setUser: (user: User) => set(() => ({ ...user })),
 
-  // openModal: () => set((state) => ({ modal: true })),
-  // closeModal: () => set((state) => ({ modal: false, selectedBid: null })),
   // setSelectedBid: (bid: Bid) => set(produce((state) => {
   //   state.selectedBid = bid
   // }))

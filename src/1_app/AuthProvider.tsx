@@ -5,10 +5,12 @@ import toast from "react-hot-toast";
 import { fetchCurrentUser } from "../5_entities/User/User";
 import { AuthProviders } from "../5_entities/User/user.types";
 import { useUserStore } from "../5_entities/User/UserStore";
+import { useNavigate } from "react-router-dom";
 
 export default function AuthProvider({ ...props }: PropsWithChildren) {
   const [user, loading, error] = useAuthState(auth);
   const { setUser } = useUserStore();
+  const navigate = useNavigate();
 
   if (error) toast("Ошибка пользователя");
 
@@ -18,7 +20,8 @@ export default function AuthProvider({ ...props }: PropsWithChildren) {
       if (`${origin}/Sign` !== window.location.href) {
         //`${origin}/SignUp` !== window.location.href
         //console.log(`${origin}/SignIn` !== window.location.href)
-        window.location.href = `${origin}/Sign`;
+        // window.location.href = `${origin}/Sign`;
+        navigate("/Sign");
       }
     }
     console.log(user);

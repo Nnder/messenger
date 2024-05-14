@@ -6,15 +6,17 @@ import { getAuth } from "firebase/auth";
 import SignUpForm from "../../4_features/Forms/SignUp";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 export default function Sign() {
   const [login, setLogin] = useState<boolean>(true);
   const auth = getAuth();
   const [user, loading, error] = useAuthState(auth);
+  const navigate = useNavigate();
 
   if (error) toast("Ошибка пользователя");
 
-  if (!loading && user) window.location.href = window.location.origin;
+  if (!loading && user) navigate("/");
 
   return (
     <Box

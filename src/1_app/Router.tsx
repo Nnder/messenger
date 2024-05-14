@@ -4,14 +4,17 @@ import NotFount from "../2_pages/Error/NotFount";
 import Sign from "../2_pages/Sign/Sign";
 import Navbar from "../3_widget/Navbar/Navbar";
 import { Chat } from "../2_pages/Chat/Chat";
+import AuthProvider from "./AuthProvider";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: (
       <>
-        <Navbar />
-        <MainPage />
+        <AuthProvider>
+          <Navbar />
+          <MainPage />
+        </AuthProvider>
       </>
     ),
     errorElement: <div>Error</div>,
@@ -40,8 +43,10 @@ const router = createBrowserRouter([
     path: "*",
     element: (
       <>
-        <Navbar />
-        <NotFount />
+        <AuthProvider>
+          <Navbar />
+          <NotFount />
+        </AuthProvider>
       </>
     ),
     errorElement: <div>Error</div>,
