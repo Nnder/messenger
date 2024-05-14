@@ -1,4 +1,5 @@
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import toast from "react-hot-toast";
 
 const SignInWithData = (email: string, password: string) => {
   const auth = getAuth();
@@ -10,8 +11,8 @@ const SignInWithData = (email: string, password: string) => {
       // ...
     })
     .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
+      toast(error.message);
+      console.log(error);
     });
 };
 

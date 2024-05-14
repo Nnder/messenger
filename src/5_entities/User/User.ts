@@ -10,8 +10,6 @@ export const fetchCurrentUser = async (
   email: string,
   AuthProvider: AuthProviders,
 ) => {
-  // let user = await getDoc(collection(db, 'users'), "enter uid")
-
   const queryUser = await query(
     collection(db, "users"),
     where("email", "==", email),
