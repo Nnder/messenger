@@ -9,6 +9,7 @@ const signInWithGoogle = () => {
   signInWithPopup(auth, provider)
     .then((result) => {
       const credential = GoogleAuthProvider.credentialFromResult(result);
+      console.log(credential);
       // const token = credential?.accessToken || "";
       // const user = result.user;
     })
