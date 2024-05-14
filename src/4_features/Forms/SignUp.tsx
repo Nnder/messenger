@@ -1,4 +1,4 @@
-import createUser from "../../6_shared/firebase/SignUp/SignUp";
+import RegisterUser from "../../6_shared/firebase/SignUp/SignUp";
 import { Box, Button, TextField } from "@mui/material";
 import {
   Controller,
@@ -18,12 +18,11 @@ export default function SignUpForm() {
   const {
     control,
     handleSubmit,
-    reset,
     formState: { errors },
   } = methods;
 
   const handle = async (data: FieldValues) => {
-    createUser(data.email, data.password);
+    await RegisterUser(data.email, data.password);
   };
 
   return (

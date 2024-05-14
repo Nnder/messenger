@@ -18,7 +18,6 @@ export default function SignInForm() {
   const {
     control,
     handleSubmit,
-    reset,
     formState: { errors },
   } = methods;
 

@@ -2,6 +2,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../6_shared/firebase/firebase";
 import { PropsWithChildren, useEffect } from "react";
 import toast from "react-hot-toast";
+import { fetchCurrentUser } from "../5_entities/User/User";
 
 export default function AuthProvider({
   children,
@@ -22,8 +23,12 @@ export default function AuthProvider({
     }
     console.log(user);
 
-    if (user) {
+    if (user && user.email && user.providerData) {
       console.log("Вы авторизованы");
+      const data = fetchCurrentUser(
+        user?.email,
+        user.providerData[0].providerId,
+      ).then((data) => console.log(data));
     } else {
       console.log("Вы не авторизованы");
     }

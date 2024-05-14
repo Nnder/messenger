@@ -3,6 +3,7 @@ import MainPage from "../2_pages/MainPage";
 import NotFount from "../2_pages/Error/NotFount";
 import Sign from "../2_pages/Sign/Sign";
 import Navbar from "../3_widget/Navbar/Navbar";
+import { Chat } from "../2_pages/Chat/Chat";
 
 const router = createBrowserRouter([
   {
@@ -21,8 +22,8 @@ const router = createBrowserRouter([
         element: <div>friends</div>,
       },
       {
-        path: "chats",
-        element: <div>chats</div>,
+        path: "chat/:id",
+        element: <Chat />,
       },
       {
         path: "settings",
