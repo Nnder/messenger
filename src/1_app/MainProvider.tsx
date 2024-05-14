@@ -4,7 +4,7 @@ import { PropsWithChildren } from "react";
 import { Toaster } from "react-hot-toast";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Router from "./Router";
-import AuthProvider from "./AuthProvider";
+// import AuthProvider from "./AuthProvider";
 
 const theme = createTheme({
   palette: {
