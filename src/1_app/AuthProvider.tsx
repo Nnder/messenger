@@ -3,12 +3,12 @@ import { auth } from "../6_shared/firebase/firebase";
 import { PropsWithChildren, useEffect } from "react";
 import toast from "react-hot-toast";
 import { fetchCurrentUser } from "../5_entities/User/User";
+import { AuthProviders } from "../5_entities/User/user.types";
+import { useUserStore } from "../5_entities/User/UserStore";
 
-export default function AuthProvider({
-  children,
-  ...props
-}: PropsWithChildren) {
+export default function AuthProvider({ ...props }: PropsWithChildren) {
   const [user, loading, error] = useAuthState(auth);
+  const { setUser } = useUserStore();
 
   if (error) toast("Ошибка пользователя");
 
@@ -25,14 +25,13 @@ export default function AuthProvider({
 
     if (user && user.email && user.providerData) {
       console.log("Вы авторизованы");
-      const data = fetchCurrentUser(
+      fetchCurrentUser(
         user?.email,
-        user.providerData[0].providerId,
-      ).then((data) => console.log(data));
+        user.providerData[0].providerId as AuthProviders,
+      ).then((data) => setUser(data));
     } else {
       console.log("Вы не авторизованы");
     }
   }, [user, loading]);
-
-  return <>{children}</>;
+  return <>{props.children}</>;
 }

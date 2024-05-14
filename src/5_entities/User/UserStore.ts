@@ -1,15 +1,15 @@
 import { create } from "zustand";
 import { UserStore, User } from "./user.types";
 
-export const useUserStore = create<UserStore>((set, get) => ({
+export const useUserStore = create<UserStore>((set) => ({
   uid: null,
   createdAt: new Date(),
   lastOnline: new Date(),
   email: "",
   username: "",
-  status: false,
+  status: "offline",
   provider: "",
-  setUser: (user: User) => set((state) => ({ ...user })),
+  setUser: (user: User) => set(() => ({ ...user })),
 
   // openModal: () => set((state) => ({ modal: true })),
   // closeModal: () => set((state) => ({ modal: false, selectedBid: null })),

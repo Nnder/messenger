@@ -1,13 +1,14 @@
-export type AuthProvider = "password" | "google.com" | "";
+export type AuthProviders = "password" | "google.com" | "";
+export type UserStatus = "offline" | "online";
 
 export interface User {
-  uid: string | null;
+  uid?: string | null;
   createdAt: Date;
   lastOnline: Date;
   email: string;
   username: string;
-  status: boolean;
-  provider: AuthProvider;
+  status: UserStatus;
+  provider: AuthProviders;
 }
 
 export interface UserStore extends User {

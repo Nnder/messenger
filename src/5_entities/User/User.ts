@@ -1,12 +1,16 @@
 import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../6_shared/firebase/firebase";
+import { AuthProviders, User } from "./user.types";
 
-// const createUser = (params) => {
+const createUser = async (params: User) => {
+  return await addDoc(collection(db, "users"), params);
+};
 
-// }
-
-export const fetchCurrentUser = async (email: string, AuthProvider: string) => {
-  // let user = await getDoc(collection(db, 'users'), {UID: '123123123'})
+export const fetchCurrentUser = async (
+  email: string,
+  AuthProvider: AuthProviders,
+) => {
+  // let user = await getDoc(collection(db, 'users'), "enter uid")
 
   const queryUser = await query(
     collection(db, "users"),
@@ -23,7 +27,7 @@ export const fetchCurrentUser = async (email: string, AuthProvider: string) => {
 
   if (data.length) return data[0];
 
-  const params = {
+  const params: User = {
     createdAt: new Date(),
     lastOnline: new Date(),
     status: "offline",
@@ -32,5 +36,5 @@ export const fetchCurrentUser = async (email: string, AuthProvider: string) => {
     provider: AuthProvider,
   };
 
-  return await addDoc(collection(db, "users"), params);
+  return await createUser(params);
 };
