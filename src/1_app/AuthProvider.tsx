@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function AuthProvider({ ...props }: PropsWithChildren) {
   const [user, loading, error] = useAuthState(auth);
-  const { setUser, uid } = useUserStore();
+  const { setUser } = useUserStore();
   const navigate = useNavigate();
 
   if (error) toast("Ошибка пользователя");
@@ -31,12 +31,10 @@ export default function AuthProvider({ ...props }: PropsWithChildren) {
       fetchCurrentUser(
         user?.email,
         user.providerData[0].providerId as AuthProviders,
-      ).then((data) => console.log("user", data));
+      ).then((data) => setUser(data));
     } else {
       console.log("Вы не авторизованы");
     }
-
-    console.log("uid", uid);
   }, [user, loading]);
   return <>{props.children}</>;
 }

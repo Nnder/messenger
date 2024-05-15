@@ -1,10 +1,18 @@
-import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  getDocs,
+  query,
+  where,
+  doc,
+} from "firebase/firestore";
 import { db } from "../../6_shared/firebase/firebase";
 import { AuthProviders, User } from "./User.types";
 
 const createUser = async (params: User) => {
   const user = await addDoc(collection(db, "users"), params);
   params.uid = user.id;
+  params.ref = doc(db, "users", user.id);
   return params;
 };
 
@@ -21,11 +29,10 @@ export const fetchCurrentUser = async (
   const data: any = [];
 
   const querySnapshot = await getDocs(queryUser);
-  querySnapshot.forEach((doc) => {
-    data.push({ ...doc.data(), uid: doc.id });
+  querySnapshot.forEach((document) => {
+    const ref = doc(db, "users", document.id);
+    data.push({ ...document.data(), uid: document.id, ref: ref });
   });
-
-  console.log("chech", data[0]);
 
   if (data.length) return data[0];
 

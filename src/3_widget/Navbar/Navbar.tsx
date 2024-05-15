@@ -4,14 +4,22 @@ import ButtonFolder from "../../6_shared/UI/Buttons/Folder/ButtonFolder";
 import ChatItem from "../../4_features/Chat/ChatItem";
 import MainModal from "../../4_features/Modal/MainModal";
 import { useEffect } from "react";
+import { fetchChats } from "../../5_entities/Chat/Chat";
+import { useUserStore } from "../../5_entities/User/UserStore";
+import toast from "react-hot-toast";
 // import { useTheme } from "@emotion/react";
 
 export default function Navbar() {
   // const theme = useTheme();
+  const { uid, getUser } = useUserStore();
 
-  // useEffect(()=>{
-  //   fetchChats
-  // }, [])
+  useEffect(() => {
+    if (uid) {
+      let data;
+      fetchChats(getUser()).then((chats) => (data = chats));
+      console.log("chats", data);
+    } else toast("Ошибка id пользователя. Попробуйте обновить страницу.");
+  }, [uid]);
   return (
     <Box
       sx={{

@@ -1,15 +1,16 @@
 import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../6_shared/firebase/firebase";
 import { Chat } from "./Chat.types";
+import { User } from "../User/User.types";
 
-const createChat = async (params: Partial<Chat>) => {
+export const createChat = async (params: Partial<Chat>) => {
   return await addDoc(collection(db, "chats"), params);
 };
 
-export const fetchChats = async (uid: string) => {
+export const fetchChats = async (user: User) => {
   const queryChats = await query(
     collection(db, "chats"),
-    where("users", "array-contains", uid),
+    where("users", "array-contains", user.ref),
   );
 
   const chats: Chat[] = [];
