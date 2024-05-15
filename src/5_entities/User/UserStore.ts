@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { UserStore, User } from "./user.types";
+import { UserStore, User } from "./User.types";
 
 export const useUserStore = create<UserStore>((set) => ({
   uid: null,

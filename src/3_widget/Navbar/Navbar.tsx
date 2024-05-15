@@ -3,10 +3,15 @@ import ButtonText from "../../6_shared/UI/Buttons/Folder/ButtonText";
 import ButtonFolder from "../../6_shared/UI/Buttons/Folder/ButtonFolder";
 import ChatItem from "../../4_features/Chat/ChatItem";
 import MainModal from "../../4_features/Modal/MainModal";
+import { useEffect } from "react";
 // import { useTheme } from "@emotion/react";
 
 export default function Navbar() {
   // const theme = useTheme();
+
+  // useEffect(()=>{
+  //   fetchChats
+  // }, [])
   return (
     <Box
       sx={{

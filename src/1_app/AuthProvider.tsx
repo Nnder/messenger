@@ -3,13 +3,13 @@ import { auth } from "../6_shared/firebase/firebase";
 import { PropsWithChildren, useEffect } from "react";
 import toast from "react-hot-toast";
 import { fetchCurrentUser } from "../5_entities/User/User";
-import { AuthProviders } from "../5_entities/User/user.types";
+import { AuthProviders } from "../5_entities/User/User.types";
 import { useUserStore } from "../5_entities/User/UserStore";
 import { useNavigate } from "react-router-dom";
 
 export default function AuthProvider({ ...props }: PropsWithChildren) {
   const [user, loading, error] = useAuthState(auth);
-  const { setUser } = useUserStore();
+  const { setUser, uid } = useUserStore();
   const navigate = useNavigate();
 
   if (error) toast("Ошибка пользователя");
@@ -31,10 +31,12 @@ export default function AuthProvider({ ...props }: PropsWithChildren) {
       fetchCurrentUser(
         user?.email,
         user.providerData[0].providerId as AuthProviders,
-      ).then((data) => setUser(data));
+      ).then((data) => console.log("user", data));
     } else {
       console.log("Вы не авторизованы");
     }
+
+    console.log("uid", uid);
   }, [user, loading]);
   return <>{props.children}</>;
 }
