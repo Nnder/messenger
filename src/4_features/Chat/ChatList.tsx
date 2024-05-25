@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useUserStore } from "../../5_entities/User/UserStore";
-import { fetchChats } from "../../5_entities/Chat/Chat";
+import { fetchChats, subscribeOnChats } from "../../5_entities/Chat/Chat";
 import PageLoader from "../../6_shared/UI/Loaders/PageLoader";
 import ChatItem from "./ChatItem";
 import { Chat } from "../../5_entities/Chat/Chat.types";
@@ -14,6 +14,12 @@ export const ChatList = () => {
     queryKey: ["chats", uid],
     queryFn: () => fetchChats(getUser()),
   });
+
+  const onChatsChange = (chats: Chat[]) => {
+    queryClient.setQueryData(["chats", uid], () => chats);
+  };
+
+  subscribeOnChats(getUser(), onChatsChange);
 
   if (isFetched && !isLoading) {
     return (

@@ -1,11 +1,7 @@
 import { Box, Input } from "@mui/material";
 import ButtonText from "../../6_shared/UI/Buttons/Folder/ButtonText";
 import ButtonFolder from "../../6_shared/UI/Buttons/Folder/ButtonFolder";
-import ChatItem from "../../4_features/Chat/ChatItem";
 import MainModal from "../../4_features/Modal/MainModal";
-import { fetchChats } from "../../5_entities/Chat/Chat";
-import { useUserStore } from "../../5_entities/User/UserStore";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ChatList } from "../../4_features/Chat/ChatList";
 // import { useTheme } from "@emotion/react";
 
