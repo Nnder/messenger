@@ -3,28 +3,28 @@ import ButtonText from "../../6_shared/UI/Buttons/Folder/ButtonText";
 import ButtonFolder from "../../6_shared/UI/Buttons/Folder/ButtonFolder";
 import ChatItem from "../../4_features/Chat/ChatItem";
 import MainModal from "../../4_features/Modal/MainModal";
-import { useEffect } from "react";
 import { fetchChats } from "../../5_entities/Chat/Chat";
 import { useUserStore } from "../../5_entities/User/UserStore";
-import toast from "react-hot-toast";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { ChatList } from "../../4_features/Chat/ChatList";
 // import { useTheme } from "@emotion/react";
 
 export default function Navbar() {
   // const theme = useTheme();
-  const { uid, getUser } = useUserStore();
+  // const { uid, getUser } = useUserStore();
 
-  useEffect(() => {
-    if (uid) {
-      let data;
-      fetchChats(getUser()).then((chats) => (data = chats));
-      console.log("chats", data);
-    } else toast("Ошибка id пользователя. Попробуйте обновить страницу.");
-  }, [uid]);
+  // const queryClient = useQueryClient()
+  // const {data, isLoading, isFetched} = useQuery({ queryKey: ['chats', uid], queryFn: ()=>fetchChats(getUser()) })
+
+  // if(isFetched && !isLoading){
+  //   console.log('query',data)
+  // }
+
   return (
     <Box
       sx={{
         width: { xs: "100vw", sm: "30vw" },
-        maxWidth: { xs: "100vw", md: "300px" },
+        maxWidth: { xs: "100vw", md: "500px" },
         background: "black",
         height: "100vh",
         display: "grid",
@@ -56,7 +56,7 @@ export default function Navbar() {
         <Box
           sx={{
             display: { xs: "none", sm: "none", md: "block" },
-            width: "25%",
+            width: "20%",
             background: "#201E1F",
             borderRight: "1px solid #353535",
             height: "calc(100vh - 56px)",
@@ -94,7 +94,6 @@ export default function Navbar() {
         >
           <ButtonText>Все чаты</ButtonText>
           <ButtonText>Личное</ButtonText>
-
           <ButtonText>Все чаты</ButtonText>
           <ButtonText>Личное</ButtonText>
           <ButtonText>Все чаты</ButtonText>
@@ -111,7 +110,7 @@ export default function Navbar() {
 
         <Box
           sx={{
-            width: { sm: "100%", md: "75%" },
+            width: { sm: "100%", md: "80%" },
             height: {
               xs: "calc(100vh - 112px)",
               sm: "calc(100vh - 112px)",
@@ -120,28 +119,7 @@ export default function Navbar() {
             overflow: "auto",
           }}
         >
-          <ChatItem href="/chat/1">1</ChatItem>
-          <ChatItem href="/chat/1">1</ChatItem>
-          <ChatItem href="/chat/1">1</ChatItem>
-          <ChatItem href="/chat/1">1</ChatItem>
-          <ChatItem href="/chat/1">1</ChatItem>
-          <ChatItem href="/chat/1">1</ChatItem>
-          <ChatItem href="/chat/1">1</ChatItem>
-          <ChatItem href="/chat/1">1</ChatItem>
-          <ChatItem href="/chat/1">1</ChatItem>
-          <ChatItem href="/chat/1">1</ChatItem>
-          <ChatItem href="/chat/1">1</ChatItem>
-          <ChatItem href="/chat/1">1</ChatItem>
-          <ChatItem href="/chat/1">1</ChatItem>
-          <ChatItem href="/chat/1">1</ChatItem>
-          <ChatItem href="/chat/1">1</ChatItem>
-          <ChatItem href="/chat/1">1</ChatItem>
-          <ChatItem href="/chat/1">1</ChatItem>
-          <ChatItem href="/chat/1">1</ChatItem>
-          <ChatItem href="/chat/1">1</ChatItem>
-          <ChatItem href="/chat/1">1</ChatItem>
-          <ChatItem href="/chat/1">1</ChatItem>
-          <ChatItem href="/chat/1">1</ChatItem>
+          <ChatList />
         </Box>
       </Box>
     </Box>

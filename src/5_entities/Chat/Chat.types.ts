@@ -7,9 +7,15 @@ export interface ChatStore {
   updateChat: (chat: Chat) => void;
 }
 
+type firebaseDate = {
+  seconds: number;
+  nanoseconds: number;
+};
+
 export interface Chat {
-  createdAt: Date;
-  updatedAt: Date;
+  uid?: string;
+  createdAt: firebaseDate;
+  updatedAt: firebaseDate;
   lastMessage: string;
   name: string;
   notRead: number | null;
