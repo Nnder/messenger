@@ -5,12 +5,17 @@ import toast from "react-hot-toast";
 import { fetchCurrentUser } from "../5_entities/User/User";
 import { AuthProviders } from "../5_entities/User/User.types";
 import { useUserStore } from "../5_entities/User/UserStore";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
+import { Chat } from "../5_entities/Chat/Chat.types";
+import { subscribeOnChats } from "../5_entities/Chat/Chat";
+import PageLoader from "../6_shared/UI/Loaders/PageLoader";
 
 export default function AuthProvider({ ...props }: PropsWithChildren) {
   const [user, loading, error] = useAuthState(auth);
-  const { setUser } = useUserStore();
-  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const { setUser, getUser } = useUserStore();
+  // const navigate = useNavigate();
 
   if (error) toast("Ошибка пользователя");
 
@@ -20,8 +25,8 @@ export default function AuthProvider({ ...props }: PropsWithChildren) {
       if (`${origin}/Sign` !== window.location.href) {
         //`${origin}/SignUp` !== window.location.href
         //console.log(`${origin}/SignIn` !== window.location.href)
-        // window.location.href = `${origin}/Sign`;
-        navigate("/Sign");
+        window.location.href = `${origin}/Sign`;
+        // navigate("/Sign");
       }
     }
     console.log(user);
@@ -31,10 +36,30 @@ export default function AuthProvider({ ...props }: PropsWithChildren) {
       fetchCurrentUser(
         user?.email,
         user.providerData[0].providerId as AuthProviders,
-      ).then((data) => setUser(data));
+      ).then((userData) => {
+        setUser(userData);
+
+        const user = getUser();
+
+        const onChatsChange = (chats: Chat[]) => {
+          queryClient.setQueryData(["chats", user.uid], () => chats);
+        };
+
+        subscribeOnChats(user, onChatsChange);
+      });
     } else {
       console.log("Вы не авторизованы");
     }
   }, [user, loading]);
+
+  if (loading && !user) {
+    console.log("loading");
+    return (
+      <>
+        <PageLoader />
+      </>
+    );
+  }
+
   return <>{props.children}</>;
 }

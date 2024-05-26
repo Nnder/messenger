@@ -1,9 +1,10 @@
 import { Box, ThemeProvider, createTheme } from "@mui/material";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { PropsWithChildren } from "react";
 import { Toaster } from "react-hot-toast";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import Router from "./Router";
+// import Router from "./Router";
+import AuthProvider from "./AuthProvider";
+import { PropsWithChildren } from "react";
 
 const theme = createTheme({
   palette: {
@@ -64,15 +65,16 @@ export default function MainProvider({ children }: PropsWithChildren) {
       <Toaster position="top-right" />
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={theme}>
-          <Box
-            sx={{
-              display: { xs: "block", sm: "grid" },
-              gridTemplateColumns: "auto 1fr",
-            }}
-          >
-            {children}
-            <Router />
-          </Box>
+          <AuthProvider>
+            <Box
+              sx={{
+                display: { xs: "block", sm: "grid" },
+                gridTemplateColumns: "auto 1fr",
+              }}
+            >
+              {children}
+            </Box>
+          </AuthProvider>
         </ThemeProvider>
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>

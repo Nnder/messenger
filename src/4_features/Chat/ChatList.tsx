@@ -1,31 +1,17 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useUserStore } from "../../5_entities/User/UserStore";
-import { fetchChats, subscribeOnChats } from "../../5_entities/Chat/Chat";
 import PageLoader from "../../6_shared/UI/Loaders/PageLoader";
 import ChatItem from "./ChatItem";
 import { Chat } from "../../5_entities/Chat/Chat.types";
 import { Box } from "@mui/material";
+import { useGetChats } from "../../6_shared/hooks/useGetChats";
 
 export const ChatList = () => {
-  const { uid, getUser } = useUserStore();
-  const queryClient = useQueryClient();
-
-  const { data, isLoading, isFetched } = useQuery({
-    queryKey: ["chats", uid],
-    queryFn: () => fetchChats(getUser()),
-  });
-
-  const onChatsChange = (chats: Chat[]) => {
-    queryClient.setQueryData(["chats", uid], () => chats);
-  };
-
-  subscribeOnChats(getUser(), onChatsChange);
+  const { data, isLoading, isFetched } = useGetChats();
 
   if (isFetched && !isLoading) {
     return (
       <>
         {data?.map((chat: Chat) => (
-          <ChatItem key={chat.uid} href={`chat/${chat.uid}`} chat={chat} />
+          <ChatItem key={chat.uid} href={`chats/${chat.uid}`} chat={chat} />
         ))}
       </>
     );

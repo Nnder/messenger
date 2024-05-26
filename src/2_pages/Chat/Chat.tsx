@@ -4,7 +4,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 export const Chat = () => {
   const navigate = useNavigate();
-  let { id } = useParams();
+  let { chatId } = useParams();
 
   return (
     <Box>
@@ -24,7 +24,7 @@ export const Chat = () => {
           <Typography>Chat name</Typography>
         </Box>
       </Box>
-      <div>Chat {id}</div>
+      <div>Chat {chatId}</div>
     </Box>
   );
 };
