@@ -21,12 +21,12 @@ const router = createBrowserRouter([
     element: <Root />,
     errorElement: <NotFound />,
     caseSensitive: true,
-    // children: [
-    //   {
-    //     path: '/chats/:chatId',
-    //     element: <Chat />,
-    //   },
-    // ],
+    children: [
+      {
+        path: "/chats/:chatId",
+        element: <Chat />,
+      },
+    ],
   },
   {
     path: "/chats/:chatId",
@@ -42,6 +42,15 @@ const router = createBrowserRouter([
     element: <Sign />,
     errorElement: <div>Error2</div>,
   },
+  // {
+  //   path: "/*",
+  //   element: (
+  //     <>
+  //         <NotFound />
+  //     </>
+  //   ),
+  //   errorElement: <div>Error</div>,
+  // },
 ]);
 
 // const router = createBrowserRouter([
