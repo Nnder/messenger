@@ -1,5 +1,6 @@
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import { Box } from "@mui/material";
 
 export default function PageLoader() {
   gsap.registerPlugin(useGSAP);
@@ -11,8 +12,12 @@ export default function PageLoader() {
   ); // <-- scope is for selector text (optional)
 
   return (
-    <div className="container">
-      <img className="loader" src="loader.svg" alt="..." />
-    </div>
+    <Box
+      sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+    >
+      <div className="container">
+        <img className="loader" src="loader.svg" alt="..." />
+      </div>
+    </Box>
   );
 }

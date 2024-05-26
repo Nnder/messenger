@@ -42,76 +42,7 @@ const router = createBrowserRouter([
     element: <Sign />,
     errorElement: <div>Error2</div>,
   },
-  // {
-  //   path: "/*",
-  //   element: (
-  //     <>
-  //         <NotFound />
-  //     </>
-  //   ),
-  //   errorElement: <div>Error</div>,
-  // },
 ]);
-
-// const router = createBrowserRouter([
-//   {
-//     path: "/",
-//     element: (
-//       <>
-//         <AuthProvider>
-//           <Navbar />
-//           <MainPage />
-//         </AuthProvider>
-//       </>
-//     ),
-//     errorElement: <div>Error1</div>,
-//     // loader: true,
-//     children: [
-//       {
-//         path: "friends",
-//         element: <div>friends</div>,
-//       },
-//       {
-//         path: "chat/:id",
-//         element: <Chat />,
-//       },
-//       {
-//         path: "settings",
-//         element: <div>setting</div>,
-//       },
-//     ],
-//   },
-//   {
-//     path: "/Sign",
-//     element: <Sign />,
-//     errorElement: <div>Error2</div>,
-//   },
-//   // {
-//   //   path: "/*",
-//   //   element: (
-//   //     <>
-//   //       <AuthProvider>
-//   //         <Navbar />
-//   //         {/* <NotFount /> */}
-//   //         <MainPage />
-//   //       </AuthProvider>
-//   //     </>
-//   //   ),
-//   //   errorElement: <div>Error</div>,
-//   // },
-// ]);
-
-// const App = ()=>{
-//   return (
-//     <>
-//     <MainProvider>
-//       <Navbar />
-
-//     </MainProvider>
-
-//     </>
-//   )
-// }
 
 export default function Router() {
   return <RouterProvider router={router} />;

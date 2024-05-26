@@ -2,7 +2,7 @@ import { Box, Button, ButtonProps, Typography } from "@mui/material";
 import { PropsWithChildren } from "react";
 import { useNavigate } from "react-router-dom";
 import { Chat } from "../../5_entities/Chat/Chat.types";
-import dayjs from "dayjs";
+import lastMessageTime from "../../6_shared/helpers/lastMessageTime";
 
 export default function ChatItem({
   children,
@@ -11,15 +11,8 @@ export default function ChatItem({
   ...props
 }: PropsWithChildren<ButtonProps & { chat: Chat }>) {
   const navigate = useNavigate();
-
   const Unread = "+100";
-
-  const now = dayjs();
-  const seconds = dayjs.unix(chat.updatedAt.seconds);
-  const date =
-    now.unix() - 86400 < seconds.unix()
-      ? seconds.format("HH:mm")
-      : seconds.format("DD/MM/YYYY");
+  const date = lastMessageTime(chat.updatedAt.seconds);
 
   return (
     <Button
@@ -49,7 +42,6 @@ export default function ChatItem({
             width: 1,
           }}
         >
-          {/* overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' */}
           <Typography
             textAlign={"left"}
             sx={{
