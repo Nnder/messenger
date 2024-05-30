@@ -1,7 +1,7 @@
 import { create } from "zustand";
-import { UserStore, User } from "./User.types";
+import { IUserStore, IUser } from "./User.types";
 
-export const useUserStore = create<UserStore>((set, get) => ({
+export const useUserStore = create<IUserStore>((set, get) => ({
   uid: null,
   createdAt: new Date(),
   lastOnline: new Date(),
@@ -9,7 +9,7 @@ export const useUserStore = create<UserStore>((set, get) => ({
   username: "",
   status: "offline",
   provider: "",
-  setUser: (user: User) => set(() => ({ ...user })),
+  setUser: (user: IUser) => set(() => ({ ...user })),
   getUser: () => {
     const data = get();
     return {
@@ -21,7 +21,7 @@ export const useUserStore = create<UserStore>((set, get) => ({
       username: data.username,
       uid: data.uid,
       ref: data.ref,
-    } as User;
+    } as IUser;
   },
 
   // setSelectedBid: (bid: Bid) => set(produce((state) => {

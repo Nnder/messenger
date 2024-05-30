@@ -1,6 +1,6 @@
 import PageLoader from "../../6_shared/UI/Loaders/PageLoader";
 import ChatItem from "./ChatItem";
-import { Chat } from "../../5_entities/Chat/Chat.types";
+import { IChat } from "../../5_entities/Chat/Chat.types";
 import { Box } from "@mui/material";
 import { useGetChats } from "../../6_shared/hooks/useGetChats";
 
@@ -10,7 +10,7 @@ export const ChatList = () => {
   if (isFetched && !isLoading) {
     return (
       <>
-        {data?.map((chat: Chat) => (
+        {data?.map((chat: IChat) => (
           <ChatItem key={chat.uid} href={`chats/${chat.uid}`} chat={chat} />
         ))}
       </>

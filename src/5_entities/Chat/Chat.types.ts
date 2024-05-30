@@ -1,10 +1,10 @@
-import { User } from "../User/User.types";
+import { IUser } from "../User/User.types";
 
-export interface ChatStore {
-  Chats: Chat[];
-  setChats: (chats: Chat[]) => void;
-  removeChat: (chat: Chat) => void;
-  updateChat: (chat: Chat) => void;
+export interface IChatStore {
+  Chats: IChat[];
+  setChats: (chats: IChat[]) => void;
+  removeChat: (chat: IChat) => void;
+  updateChat: (chat: IChat) => void;
 }
 
 type firebaseDate = {
@@ -12,12 +12,12 @@ type firebaseDate = {
   nanoseconds: number;
 };
 
-export interface Chat {
+export interface IChat {
   uid?: string;
   createdAt: firebaseDate;
   updatedAt: firebaseDate;
   lastMessage: string;
   name: string;
   notRead: number | null;
-  users: User[];
+  users: IUser[];
 }

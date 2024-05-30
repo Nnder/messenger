@@ -7,9 +7,9 @@ import {
   doc,
 } from "firebase/firestore";
 import { db } from "../../6_shared/firebase/firebase";
-import { AuthProviders, User } from "./User.types";
+import { AuthProviders, IUser } from "./User.types";
 
-const createUser = async (params: User) => {
+const createUser = async (params: IUser) => {
   const user = await addDoc(collection(db, "users"), params);
   params.uid = user.id;
   params.ref = doc(db, "users", user.id);
@@ -36,7 +36,7 @@ export const fetchCurrentUser = async (
 
   if (data.length) return data[0];
 
-  const params: User = {
+  const params: IUser = {
     createdAt: new Date(),
     lastOnline: new Date(),
     status: "offline",

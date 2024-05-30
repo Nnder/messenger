@@ -6,7 +6,7 @@ import { fetchCurrentUser } from "../5_entities/User/User";
 import { AuthProviders } from "../5_entities/User/User.types";
 import { useUserStore } from "../5_entities/User/UserStore";
 import { useQueryClient } from "@tanstack/react-query";
-import { Chat } from "../5_entities/Chat/Chat.types";
+import { IChat } from "../5_entities/Chat/Chat.types";
 import { subscribeOnChats } from "../5_entities/Chat/Chat";
 import PageLoader from "../6_shared/UI/Loaders/PageLoader";
 
@@ -36,7 +36,7 @@ export default function AuthProvider({ ...props }: PropsWithChildren) {
 
         const user = getUser();
 
-        const onChatsChange = (chats: Chat[]) => {
+        const onChatsChange = (chats: IChat[]) => {
           queryClient.setQueryData(["chats", user.uid], () => chats);
         };
 

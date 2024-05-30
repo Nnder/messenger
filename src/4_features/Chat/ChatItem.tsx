@@ -1,7 +1,7 @@
 import { Box, Button, ButtonProps, Typography } from "@mui/material";
 import { PropsWithChildren } from "react";
 import { useNavigate } from "react-router-dom";
-import { Chat } from "../../5_entities/Chat/Chat.types";
+import { IChat } from "../../5_entities/Chat/Chat.types";
 import lastMessageTime from "../../6_shared/helpers/lastMessageTime";
 
 export default function ChatItem({
@@ -9,7 +9,7 @@ export default function ChatItem({
   href,
   chat,
   ...props
-}: PropsWithChildren<ButtonProps & { chat: Chat }>) {
+}: PropsWithChildren<ButtonProps & { chat: IChat }>) {
   const navigate = useNavigate();
   const Unread = "+100";
   const date = lastMessageTime(chat.updatedAt.seconds);

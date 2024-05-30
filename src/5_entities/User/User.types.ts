@@ -3,7 +3,7 @@ import { DocumentReference } from "firebase/firestore";
 export type AuthProviders = "password" | "google.com" | "";
 export type UserStatus = "offline" | "online";
 
-export interface User {
+export interface IUser {
   ref?: DocumentReference;
   uid?: string | null;
   createdAt: Date;
@@ -14,7 +14,7 @@ export interface User {
   provider: AuthProviders;
 }
 
-export interface UserStore extends User {
-  setUser: (user: User) => void;
-  getUser: () => User;
+export interface IUserStore extends IUser {
+  setUser: (user: IUser) => void;
+  getUser: () => IUser;
 }

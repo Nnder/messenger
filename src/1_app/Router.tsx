@@ -1,5 +1,4 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-// import NotFount from "../2_pages/Error/NotFount";
 import Sign from "../2_pages/Sign/Sign";
 import Navbar from "../3_widget/Navbar/Navbar";
 import { Chat } from "../2_pages/Chat/Chat";
@@ -40,7 +39,7 @@ const router = createBrowserRouter([
   {
     path: "/Sign",
     element: <Sign />,
-    errorElement: <div>Error2</div>,
+    errorElement: <div>Ошибка не удалось загрузить страницу авторизации</div>,
   },
 ]);
 
