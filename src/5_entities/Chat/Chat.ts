@@ -1,6 +1,8 @@
 import {
   addDoc,
   collection,
+  doc,
+  getDoc,
   getDocs,
   onSnapshot,
   query,
@@ -9,6 +11,7 @@ import {
 import { db } from "../../6_shared/firebase/firebase";
 import { IChat } from "./Chat.types";
 import { IUser } from "../User/User.types";
+import toast from "react-hot-toast";
 
 export const createChat = async (params: Partial<IChat>) => {
   return await addDoc(collection(db, "chats"), params);
@@ -48,37 +51,43 @@ export const subscribeOnChats = async (
   });
 };
 
-// export const fetchChat = async (user: User, chatUID: string) => {
-//   const queryChats = await query(
-//     collection(db, "chats"),
-//     where("users", "array-contains", user.ref),
-//     where("chats", "", chatUID)
-//   );
+export const fetchChat = async (chatUID: string) => {
+  const docRef = doc(db, "chats", chatUID);
 
-//   let chat: Chat = {} as Chat;
+  // const queryChats = await query(
+  //   collection(db, "chats"),
+  //   where('uid', '==', chatUID)
+  // );
 
-//   const querySnapshot = await getDocs(queryChats);
-//   querySnapshot.forEach((doc) => {
-//     chat = { ...doc.data(), uid: doc.id } as Chat;
-//   });
-//   return chat;
-// };
+  let chat: IChat = {} as IChat;
 
-// export const subscribeOnChat = async (
-//   user: User,
-//   callback: (chat: Chat) => void,
-// ) => {
-//   const queryChats = await query(
-//     collection(db, "chats"),
-//     where("users", "array-contains", user.ref),
-//   );
+  try {
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      chat = { ...docSnap.data(), uid: docSnap.id } as IChat;
+    } else {
+      toast("Чат не найден");
+    }
+  } catch (e) {
+    toast("Ошибка при получении чата");
+  }
 
-//   onSnapshot(queryChats, (snapshot: any) => {
-//     const chats: Chat[] = [];
-//     snapshot.forEach((doc: any) => {
-//       chats.push({ ...doc.data(), uid: doc.id });
-//     });
+  // const querySnapshot = await getDocs(queryChats);
+  // querySnapshot.forEach((doc) => {
+  //   chat = { ...doc.data(), uid: doc.id } as IChat;
+  // });
 
-//     callback(chats);
-//   });
-// };
+  return chat;
+};
+
+export const subscribeOnChat = async (
+  chatUID: string,
+  callback: (chat: IChat) => void,
+) => {
+  const docRef = doc(db, "chats", chatUID);
+
+  onSnapshot(docRef, (snapshot: any) => {
+    let chat: IChat = { ...snapshot.data(), uid: snapshot.id };
+    callback(chat);
+  });
+};

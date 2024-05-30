@@ -3,10 +3,23 @@ import { useNavigate, useParams } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import SendIcon from "@mui/icons-material/Send";
 import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
+import { useGetChat } from "../../6_shared/hooks/useGetChats";
+import PageLoader from "../../6_shared/UI/Loaders/PageLoader";
 
 export const Chat = () => {
   const navigate = useNavigate();
   let { chatId } = useParams();
+  const { data, isLoading, isFetched } = useGetChat(chatId || "");
+
+  console.log("chat data", data);
+
+  if (!isFetched) {
+    return (
+      <Box>
+        <PageLoader />
+      </Box>
+    );
+  }
 
   return (
     <Box
@@ -29,7 +42,7 @@ export const Chat = () => {
           <ArrowBackIcon />
         </Button>
         <Box>
-          <Typography>{chatId}</Typography>
+          <Typography>{data?.name}</Typography>
         </Box>
       </Box>
       <Box
