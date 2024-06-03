@@ -9,17 +9,14 @@ import PageLoader from "../../6_shared/UI/Loaders/PageLoader";
 export const Chat = () => {
   const navigate = useNavigate();
   let { chatId } = useParams();
-  const { data, isLoading, isFetched } = useGetChat(chatId || "");
+  const { data, isFetched } = useGetChat(chatId || "");
 
-  console.log("chat data", data);
+  console.log("chat data");
 
-  if (!isFetched) {
-    return (
-      <Box>
-        <PageLoader />
-      </Box>
-    );
-  }
+  if (!isFetched) return;
+  <Box>
+    <PageLoader />
+  </Box>;
 
   return (
     <Box

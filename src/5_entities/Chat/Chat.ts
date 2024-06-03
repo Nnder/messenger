@@ -54,11 +54,6 @@ export const subscribeOnChats = async (
 export const fetchChat = async (chatUID: string) => {
   const docRef = doc(db, "chats", chatUID);
 
-  // const queryChats = await query(
-  //   collection(db, "chats"),
-  //   where('uid', '==', chatUID)
-  // );
-
   let chat: IChat = {} as IChat;
 
   try {
@@ -71,11 +66,6 @@ export const fetchChat = async (chatUID: string) => {
   } catch (e) {
     toast("Ошибка при получении чата");
   }
-
-  // const querySnapshot = await getDocs(queryChats);
-  // querySnapshot.forEach((doc) => {
-  //   chat = { ...doc.data(), uid: doc.id } as IChat;
-  // });
 
   return chat;
 };
