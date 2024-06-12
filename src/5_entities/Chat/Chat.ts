@@ -76,8 +76,10 @@ export const subscribeOnChat = async (
 ) => {
   const docRef = doc(db, "chats", chatUID);
 
-  onSnapshot(docRef, (snapshot: any) => {
+  const unsub = onSnapshot(docRef, (snapshot: any) => {
     let chat: IChat = { ...snapshot.data(), uid: snapshot.id };
     callback(chat);
   });
+
+  return unsub;
 };

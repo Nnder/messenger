@@ -1,11 +1,10 @@
-import { Outlet } from "react-router-dom";
+import { useOutlet } from "react-router-dom";
 import { Box, Typography } from "@mui/material";
 import usePathname from "../6_shared/hooks/usePathname";
 
 export default function MainPage() {
   const path = usePathname();
-
-  // console.log(path);
+  const outlet = useOutlet();
 
   if (path === "/") {
     return (
@@ -27,9 +26,5 @@ export default function MainPage() {
     );
   }
 
-  return (
-    <>
-      <Outlet />
-    </>
-  );
+  return <>{outlet}</>;
 }

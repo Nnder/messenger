@@ -11,7 +11,7 @@ export const Chat = () => {
   let { chatId } = useParams();
   const { data, isFetched } = useGetChat(chatId || "");
 
-  console.log("chat data");
+  console.log("loader data", data);
 
   if (!isFetched) return;
   <Box>
