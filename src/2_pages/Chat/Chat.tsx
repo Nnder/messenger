@@ -105,7 +105,7 @@ export const Chat = () => {
           flexDirection: "column",
           flexGrow: 1,
           overflow: "auto",
-          height: "90vh",
+          height: "calc(100vh - 56px - 38px)",
         }}
       >
         {messages.data?.map(
