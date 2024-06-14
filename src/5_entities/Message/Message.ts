@@ -5,10 +5,12 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDoc,
   getDocs,
   onSnapshot,
   orderBy,
   query,
+  setDoc,
   where,
 } from "firebase/firestore";
 import { db } from "../../6_shared/firebase/firebase";
@@ -18,8 +20,12 @@ import { useEffect } from "react";
 import { fetchUser } from "../User/User";
 import { IUser } from "../User/User.types";
 import { updateChat } from "../Chat/Chat";
+import toast from "react-hot-toast";
 
-export interface IMessage<T, C = T> {
+export interface IMessage<
+  T = DocumentReference<DocumentData, DocumentData>,
+  C = T,
+> {
   uid: string;
   owner: T;
   text: string;
@@ -86,8 +92,23 @@ export const fetchMessages = async (
 };
 
 export const deleteMessage = async (uid: string) => {
-  const messageRef = await doc(db, "chats", uid);
+  const messageRef = await doc(db, "messages", uid);
   return await deleteDoc(messageRef);
+};
+
+export const updateMessage = async (uid: string, params: Partial<IMessage>) => {
+  const docRef = doc(db, "messages", uid);
+
+  let message: Partial<IMessage> = {};
+
+  try {
+    await setDoc(docRef, { ...params }, { merge: true });
+    message = (await getDoc(docRef)).data() as IMessage;
+  } catch (e) {
+    toast("Ошибка при обновлении сообщения");
+  }
+
+  return message;
 };
 
 export const subscribeOnMessages = async (
