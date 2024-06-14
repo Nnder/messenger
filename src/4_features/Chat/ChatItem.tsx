@@ -2,7 +2,7 @@ import { Box, Button, ButtonProps, Typography } from "@mui/material";
 import { PropsWithChildren } from "react";
 import { useNavigate } from "react-router-dom";
 import { IChat } from "../../5_entities/Chat/Chat.types";
-import lastMessageTime from "../../6_shared/helpers/lastMessageTime";
+import { lastMessageTime } from "../../6_shared/helpers/lastMessageTime";
 
 export default function ChatItem({
   children,

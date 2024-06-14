@@ -9,6 +9,8 @@ import { IUser } from "../../5_entities/User/User.types";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { useState } from "react";
 import { useUserStore } from "../../5_entities/User/UserStore";
+import { lastMessageDateTime } from "../../6_shared/helpers/lastMessageTime";
+import { firebaseDate } from "../../5_entities/Chat/Chat.types";
 
 export const Message = ({
   message,
@@ -18,6 +20,10 @@ export const Message = ({
   content: string;
 }) => {
   const { uid } = useUserStore();
+
+  const date = lastMessageDateTime(
+    { ...(message.createdAt as firebaseDate) }.seconds,
+  );
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -121,6 +127,22 @@ export const Message = ({
         >
           {message.text}
         </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
+          <Typography
+            sx={{
+              mr: 1,
+            }}
+          >
+            {date}
+          </Typography>
+
+          <Typography>{message.status}</Typography>
+        </Box>
       </Box>
     </Box>
   );

@@ -7,7 +7,7 @@ export interface IChatStore {
   updateChat: (chat: IChat) => void;
 }
 
-type firebaseDate = {
+export type firebaseDate = {
   seconds: number;
   nanoseconds: number;
 };

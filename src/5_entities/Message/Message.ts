@@ -21,6 +21,7 @@ import { fetchUser } from "../User/User";
 import { IUser } from "../User/User.types";
 import { updateChat } from "../Chat/Chat";
 import toast from "react-hot-toast";
+import { firebaseDate } from "../Chat/Chat.types";
 
 export interface IMessage<
   T = DocumentReference<DocumentData, DocumentData>,
@@ -31,7 +32,7 @@ export interface IMessage<
   text: string;
   chat: C;
   userRead: boolean;
-  createdAt: Date;
+  createdAt: firebaseDate;
   status: string;
 }
 
@@ -49,9 +50,13 @@ export const createMessage = async (
   const chatRef = await doc(db, "chats", params.chat);
   // @ts-ignore
   const ownerRef = await doc(db, "users", params.owner);
+  const date = new Date().getTime();
   params.chat = chatRef;
   params.owner = ownerRef;
-  params.createdAt = new Date();
+  params.createdAt = {
+    seconds: Math.floor(Date.now() / 1000),
+    nanoseconds: date,
+  };
   params.status = "new";
   updateChat(params.chat.id, {
     updatedAt: new Date(),
