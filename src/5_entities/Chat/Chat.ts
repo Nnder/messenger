@@ -5,6 +5,7 @@ import {
   getDoc,
   getDocs,
   onSnapshot,
+  orderBy,
   query,
   where,
 } from "firebase/firestore";
@@ -21,6 +22,7 @@ export const fetchChats = async (user: IUser) => {
   const queryChats = await query(
     collection(db, "chats"),
     where("users", "array-contains", user.ref),
+    orderBy("updatedAt", "desc"),
   );
 
   const chats: IChat[] = [];
@@ -39,6 +41,7 @@ export const subscribeOnChats = async (
   const queryChats = await query(
     collection(db, "chats"),
     where("users", "array-contains", user.ref),
+    orderBy("updatedAt", "desc"),
   );
 
   onSnapshot(queryChats, (snapshot: any) => {

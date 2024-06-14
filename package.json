@@ -26,6 +26,7 @@
     "@tanstack/react-query-devtools": "^5.32.0",
     "dayjs": "^1.11.11",
     "dotenv": "^16.4.5",
+    "emoji-picker-react": "^4.10.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^18.0.0",
     "eslint-config-prettier": "^9.1.0",
