@@ -12,10 +12,10 @@ type firebaseDate = {
   nanoseconds: number;
 };
 
-export interface IChat {
+export interface IChat<T = firebaseDate> {
   uid?: string;
-  createdAt: firebaseDate;
-  updatedAt: firebaseDate;
+  createdAt: T;
+  updatedAt: T;
   lastMessage: string;
   name: string;
   notRead: number | null;

@@ -7,6 +7,7 @@ import {
   onSnapshot,
   orderBy,
   query,
+  setDoc,
   where,
 } from "firebase/firestore";
 import { db } from "../../6_shared/firebase/firebase";
@@ -85,4 +86,22 @@ export const subscribeOnChat = async (
   });
 
   return unsub;
+};
+
+export const updateChat = async (
+  chatUID: string,
+  params: Partial<IChat<Date>>,
+) => {
+  const docRef = doc(db, "chats", chatUID);
+
+  let chat: IChat = {} as IChat;
+
+  try {
+    await setDoc(docRef, { ...params }, { merge: true });
+    chat = (await getDoc(docRef)).data() as IChat;
+  } catch (e) {
+    toast("Ошибка при обновлении чата");
+  }
+
+  return chat;
 };

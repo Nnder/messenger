@@ -13,9 +13,11 @@ import {
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useUserStore } from "../../5_entities/User/UserStore";
-import EmojiPicker from "emoji-picker-react";
+import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
 import { Theme } from "emoji-picker-react";
 import { DocumentData, DocumentReference } from "firebase/firestore";
+import { Message } from "../../4_features/Message/Message";
+import { IUser } from "../../5_entities/User/User.types";
 
 // categories={
 //           [
@@ -64,6 +66,10 @@ export const Chat = () => {
     }
   };
 
+  const emojiHendler = ({ emoji }: EmojiClickData) => {
+    setText((prev) => prev + emoji);
+  };
+
   if (!isFetched) return;
   <Box>
     <PageLoader />
@@ -104,31 +110,16 @@ export const Chat = () => {
       >
         {messages.data?.map(
           (
-            message: IMessage<DocumentReference<DocumentData, DocumentData>>,
+            message: IMessage<
+              IUser,
+              DocumentReference<DocumentData, DocumentData>
+            >,
           ) => (
-            <Box
+            <Message
               key={message.uid}
-              sx={{
-                display: "flex",
-                alignItems: "flex-start",
-                justifyContent:
-                  message.owner?.id == uid ? "flex-end" : "flex-start",
-              }}
-            >
-              <Box
-                sx={{
-                  // display: 'flex',
-                  // flexDirection: 'column',
-                  backgroundColor: "gray",
-                  borderRadius: 1,
-                  p: 0.5,
-                  m: 0.5,
-                }}
-              >
-                <Typography>{message.owner.id || "123"}</Typography>
-                <Typography>{message.text}</Typography>
-              </Box>
-            </Box>
+              message={message}
+              content={message.owner?.uid == uid ? "flex-end" : "flex-start"}
+            />
           ),
         )}
       </Box>
@@ -141,6 +132,7 @@ export const Chat = () => {
         }}
       >
         <EmojiPicker
+          onEmojiClick={emojiHendler}
           open={emojiPanel}
           skinTonesDisabled={true}
           previewConfig={{ showPreview: false }}

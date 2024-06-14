@@ -3,6 +3,7 @@ import {
   DocumentReference,
   addDoc,
   collection,
+  deleteDoc,
   doc,
   getDocs,
   onSnapshot,
@@ -14,15 +15,23 @@ import { db } from "../../6_shared/firebase/firebase";
 import { useUserStore } from "../User/UserStore";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
+import { fetchUser } from "../User/User";
+import { IUser } from "../User/User.types";
+import { updateChat } from "../Chat/Chat";
 
-export interface IMessage<T> {
+export interface IMessage<T, C = T> {
   uid: string;
   owner: T;
   text: string;
-  chat: T;
+  chat: C;
   userRead: boolean;
   createdAt: Date;
   status: string;
+}
+
+export interface ExtentedIMessage
+  extends IMessage<IUser, DocumentReference<DocumentData, DocumentData>> {
+  index: number;
 }
 
 export const createMessage = async (
@@ -38,10 +47,19 @@ export const createMessage = async (
   params.owner = ownerRef;
   params.createdAt = new Date();
   params.status = "new";
+  updateChat(params.chat.id, {
+    updatedAt: new Date(),
+    lastMessage: params.text,
+  });
   return await addDoc(collection(db, "messages"), params);
 };
 
-export const fetchMessages = async (chatUID: string, part: number = 1) => {
+export const fetchMessages = async (
+  chatUID: string,
+  part: number = 1,
+): Promise<
+  IMessage<IUser, DocumentReference<DocumentData, DocumentData>>[]
+> => {
   const docRef = await doc(db, "chats", chatUID);
   console.log(part);
   const queryChats = await query(
@@ -52,53 +70,61 @@ export const fetchMessages = async (chatUID: string, part: number = 1) => {
     // limit(30),
   );
 
-  const messages: IMessage<DocumentReference<DocumentData, DocumentData>>[] =
-    [];
+  const messages: IMessage<
+    IUser,
+    DocumentReference<DocumentData, DocumentData>
+  >[] = [];
 
   const querySnapshot = await getDocs(queryChats);
   querySnapshot.forEach((doc) => {
     messages.push({ ...doc.data(), uid: doc.id } as IMessage<
+      IUser,
       DocumentReference<DocumentData, DocumentData>
     >);
   });
   return messages;
 };
 
+export const deleteMessage = async (uid: string) => {
+  const messageRef = await doc(db, "chats", uid);
+  return await deleteDoc(messageRef);
+};
+
 export const subscribeOnMessages = async (
   chatUID: string,
   callback: (
-    messages: IMessage<DocumentReference<DocumentData, DocumentData>>[],
+    messages: IMessage<IUser, DocumentReference<DocumentData, DocumentData>>[],
   ) => void,
 ) => {
   const docRef = doc(db, "chats", chatUID);
-  const queryChats = await query(
+  const queryChats = query(
     collection(db, "messages"),
     where("chat", "==", docRef),
     orderBy("createdAt", "asc"),
-    // startAt(30*page),
-    // limit(30),
   );
 
-  const unsub = onSnapshot(queryChats, (snapshot: any) => {
-    const messages: IMessage<DocumentReference<DocumentData, DocumentData>>[] =
-      [];
-    snapshot.forEach((doc: any) => {
-      messages.push({ ...doc.data(), uid: doc.id });
-    });
+  const unsub = onSnapshot(queryChats, async (snapshot: any) => {
+    const messages: ExtentedIMessage[] = [];
+    await Promise.all(
+      snapshot.docs.map(async (doc: any, index: number) => {
+        const d = await doc.data();
+        const user = await fetchUser(d.owner.id);
+        messages.push({ ...d, uid: doc.id, owner: user, index });
+      }),
+    );
 
-    callback(messages);
+    messages.sort((a, b) => a.index - b.index);
+
+    callback(
+      messages as IMessage<
+        IUser,
+        DocumentReference<DocumentData, DocumentData>
+      >[],
+    );
   });
 
   return unsub;
 };
-
-// export const useGetMessages = (chatUID: string) => {
-//   const { uid } = useUserStore();
-//   return useQuery({
-//     queryKey: ["messages", uid, chatUID],
-//     queryFn: () => fetchMessages(chatUID),
-//   });
-// };
 
 export const useGetMessages = (chatUID: string) => {
   const { uid } = useUserStore();
@@ -107,7 +133,10 @@ export const useGetMessages = (chatUID: string) => {
   useEffect(() => {
     const fetchData = async () => {
       const onMessageChange = (
-        messages: IMessage<DocumentReference<DocumentData, DocumentData>>[],
+        messages: IMessage<
+          IUser,
+          DocumentReference<DocumentData, DocumentData>
+        >[],
       ) => {
         queryClient.setQueryData(["messages", uid, chatUID], messages);
       };

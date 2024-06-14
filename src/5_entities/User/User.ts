@@ -5,6 +5,7 @@ import {
   query,
   where,
   doc,
+  getDoc,
 } from "firebase/firestore";
 import { db } from "../../6_shared/firebase/firebase";
 import { AuthProviders, IUser } from "./User.types";
@@ -46,4 +47,10 @@ export const fetchCurrentUser = async (
   };
 
   return await createUser(params);
+};
+
+export const fetchUser = async (uid: string) => {
+  const userRef = doc(db, "users", uid);
+  const user = (await getDoc(userRef)).data();
+  return { ...user, uid };
 };
