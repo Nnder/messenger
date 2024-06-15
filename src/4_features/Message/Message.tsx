@@ -1,9 +1,5 @@
 import { Box, Button, Menu, MenuItem, Typography } from "@mui/material";
-import {
-  IMessage,
-  deleteMessage,
-  updateMessage,
-} from "../../5_entities/Message/Message";
+import { IMessage, deleteMessage } from "../../5_entities/Message/Message";
 import { DocumentData, DocumentReference } from "firebase/firestore";
 import { IUser } from "../../5_entities/User/User.types";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
@@ -11,6 +7,7 @@ import { useState } from "react";
 import { useUserStore } from "../../5_entities/User/UserStore";
 import { lastMessageDateTime } from "../../6_shared/helpers/lastMessageTime";
 import { firebaseDate } from "../../5_entities/Chat/Chat.types";
+import { useChangeMessageStore } from "../../5_entities/Message/ChangeMessageStore";
 
 export const Message = ({
   message,
@@ -20,6 +17,7 @@ export const Message = ({
   content: string;
 }) => {
   const { uid } = useUserStore();
+  const { setEditMessage } = useChangeMessageStore();
 
   const date = lastMessageDateTime(
     { ...(message.createdAt as firebaseDate) }.seconds,
@@ -36,9 +34,12 @@ export const Message = ({
   };
 
   const handleUpdateMsg = (
-    message: IMessage<IUser, DocumentReference<DocumentData, DocumentData>>,
+    message: Partial<
+      IMessage<any, DocumentReference<DocumentData, DocumentData>>
+    >,
   ) => {
-    updateMessage(message.uid, { text: "-" }).then(() => setAnchorEl(null));
+    setEditMessage(message);
+    setAnchorEl(null);
   };
 
   const handleDeleteMsg = (

@@ -2,7 +2,7 @@ import { Box, Button, IconButton, Modal } from "@mui/material";
 import { useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import logout from "../../6_shared/firebase/SignOut/SignOut";
-import { ChatForm } from "../Forms/Chat";
+import { ChatForm } from "../Forms/CreateChat";
 import { ModalWrapper } from "./Modal";
 
 export default function MainModal() {
@@ -56,7 +56,12 @@ export default function MainModal() {
             </Box>
             <Box>
               <ModalWrapper open={chatCreate} handle={handleChatCreateForm}>
-                <ChatForm />
+                <ChatForm
+                  hide={() => {
+                    setChatCreate(false);
+                    handleClose();
+                  }}
+                />
               </ModalWrapper>
             </Box>
           </Box>

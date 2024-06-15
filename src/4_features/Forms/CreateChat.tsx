@@ -18,7 +18,7 @@ const defaultValues = {
   users: [],
 };
 
-export const ChatForm = () => {
+export const ChatForm = ({ hide }: { hide: () => void }) => {
   const methods = useForm({ defaultValues: defaultValues });
   const {
     control,
@@ -33,6 +33,7 @@ export const ChatForm = () => {
     const docRef = doc(db, "users", uid);
     data.users.push(docRef);
     createChat(data);
+    hide();
   };
 
   return (
