@@ -81,18 +81,25 @@ export const fetchMessages = async (
     // limit(30),
   );
 
-  const messages: IMessage<
-    IUser,
-    DocumentReference<DocumentData, DocumentData>
-  >[] = [];
+  const messages: ExtentedIMessage[] = [];
 
   const querySnapshot = await getDocs(queryChats);
-  querySnapshot.forEach((doc) => {
-    messages.push({ ...doc.data(), uid: doc.id } as IMessage<
-      IUser,
-      DocumentReference<DocumentData, DocumentData>
-    >);
-  });
+
+  await Promise.all(
+    querySnapshot.docs.map(async (doc, index) => {
+      const d = await doc.data();
+      const ownerID = d.owner.id;
+      const user = await fetchUser(ownerID);
+      messages.push({
+        ...d,
+        uid: doc.id,
+        owner: user,
+        index,
+      } as ExtentedIMessage);
+    }),
+  );
+
+  messages.sort((a, b) => a.index - b.index);
   return messages;
 };
 

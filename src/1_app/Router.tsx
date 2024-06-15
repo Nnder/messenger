@@ -9,7 +9,7 @@ import { Box, Typography } from "@mui/material";
 const Root = () => {
   return (
     <>
-      <Navbar />
+      <Navbar key={"navbar"} />
       <MainPage />
     </>
   );
@@ -40,7 +40,7 @@ const router = createBrowserRouter([
     path: "/chats/:chatId",
     element: (
       <>
-        <Navbar />
+        <Navbar key={"navbar"} />
         <Chat />
       </>
     ),
