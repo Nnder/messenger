@@ -1,8 +1,9 @@
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, Button, Tab, TextField, Typography } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import SendIcon from "@mui/icons-material/Send";
 import CloseIcon from "@mui/icons-material/Close";
+import AddIcon from "@mui/icons-material/Add";
 import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
 import { useGetChat } from "../../6_shared/hooks/useGetChats";
 import PageLoader from "../../6_shared/UI/Loaders/PageLoader";
@@ -21,6 +22,12 @@ import { DocumentData, DocumentReference } from "firebase/firestore";
 import { Message } from "../../4_features/Message/Message";
 import { IUser } from "../../5_entities/User/User.types";
 import { useChangeMessageStore } from "../../5_entities/Message/ChangeMessageStore";
+import { ModalWrapper } from "../../4_features/Modal/Modal";
+import TabContext from "@mui/lab/TabContext";
+import TabList from "@mui/lab/TabList";
+import TabPanel from "@mui/lab/TabPanel";
+import { updateChat } from "../../5_entities/Chat/Chat";
+import { IChat } from "../../5_entities/Chat/Chat.types";
 
 // categories={
 //           [
@@ -36,14 +43,45 @@ import { useChangeMessageStore } from "../../5_entities/Message/ChangeMessageSto
 //         }
 
 export const Chat = () => {
+  const [value, setValue] = useState("0");
+
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    console.log(event);
+    setValue(newValue);
+  };
+
+  const [userFriends, setUserFriends] = useState<IUser[]>([]);
+
+  const [showChatInfo, setShowChatInfo] = useState(false);
   const [edit, setEdit] = useState(false);
   const [emojiPanel, setEmojiPanel] = useState(false);
   const navigate = useNavigate();
   let { chatId } = useParams();
   const { data, isFetched } = useGetChat(chatId || "");
-  const { uid } = useUserStore();
+  const { uid, friends } = useUserStore();
   const textRef = useRef<HTMLInputElement | null>(null);
   const { removeMsg, setNewMessage, editMessage } = useChangeMessageStore();
+
+  const filterUsers = () => {
+    const filter: IUser[] = [];
+    friends.forEach((friend) => {
+      let status = true;
+      let length = data?.users?.length ? data?.users?.length : 0;
+      for (let i = 0; i < length; i++) {
+        if (friend.ref?.id == data?.users[i].ref?.id) {
+          status = false;
+          break;
+        }
+      }
+      if (status) filter.push(friend);
+    });
+
+    return filter;
+  };
+
+  useEffect(() => {
+    if (friends && data?.users) setUserFriends(filterUsers());
+  }, [friends, data?.users]);
 
   useEffect(() => {
     const unsubEdit = useChangeMessageStore.subscribe(
@@ -103,6 +141,7 @@ export const Chat = () => {
         owner: uid,
         chat: chatId,
         userRead: false,
+        status: "новое",
       };
 
       try {
@@ -139,6 +178,31 @@ export const Chat = () => {
     if (textRef && textRef.current) textRef.current.value += emoji;
   };
 
+  const removeUser = (uid: string) => {
+    const users: DocumentReference<DocumentData, DocumentData>[] = [];
+
+    data?.users.map((user) => {
+      if (user?.ref?.id != uid && user.ref) users.push(user.ref);
+    });
+
+    const params: Partial<IChat> = {
+      // @ts-ignore
+      users,
+    };
+    // @ts-ignore
+    updateChat(chatId ? chatId : "", params);
+  };
+
+  const addUser = (ref: DocumentReference<DocumentData, DocumentData>) => {
+    const users: DocumentReference<DocumentData, DocumentData>[] = [];
+    data?.users.map((user) => {
+      // @ts-ignore
+      users.push(user.ref);
+    });
+    // @ts-ignore
+    updateChat(chatId ? chatId : "", { users: [...users, ref] });
+  };
+
   if (!isFetched) return;
   <Box>
     <PageLoader />
@@ -165,7 +229,96 @@ export const Chat = () => {
           <ArrowBackIcon />
         </Button>
         <Box>
-          <Typography>{data?.name}</Typography>
+          <Button onClick={() => data?.type == "chat" && setShowChatInfo(true)}>
+            <Typography>{data?.name}</Typography>
+          </Button>
+
+          <ModalWrapper
+            open={showChatInfo}
+            handle={() => setShowChatInfo(false)}
+          >
+            <Box
+              sx={{
+                backgroundColor: "primary.main",
+                p: 1,
+                width: {
+                  xs: "90vw",
+                  sm: "90vw",
+                  md: "600px",
+                  lg: "800px",
+                  xl: "800px",
+                },
+                minHeight: 300,
+              }}
+            >
+              <TabContext value={value}>
+                <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                  <TabList
+                    onChange={handleChange}
+                    aria-label="lab API tabs example"
+                  >
+                    <Tab
+                      label="Пользователи"
+                      value="0"
+                      sx={{
+                        color: "secondary.main",
+                        "&.Mui-selected": { color: "secondary.main" },
+                      }}
+                    />
+                    <Tab
+                      label="Добавить"
+                      value="1"
+                      sx={{
+                        color: "secondary.main",
+                        "&.Mui-selected": { color: "secondary.main" },
+                      }}
+                    />
+                  </TabList>
+                </Box>
+                <TabPanel value="0">
+                  {data?.users.map((u, index) => (
+                    <Box
+                      key={index}
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Typography>{u.username}</Typography>
+                      <Typography>{u.email}</Typography>
+                      {data.owner?.id == uid && (
+                        <Button
+                          onClick={() => removeUser(u?.ref ? u?.ref.id : "")}
+                        >
+                          <CloseIcon />
+                        </Button>
+                      )}
+                    </Box>
+                  ))}
+                </TabPanel>
+                <TabPanel value="1">
+                  {userFriends.map((friend, index) => (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                      key={index}
+                    >
+                      {friend.username}
+                      <Button
+                        onClick={() => {
+                          if (friend?.ref) addUser(friend?.ref);
+                        }}
+                      >
+                        <AddIcon />
+                      </Button>
+                    </Box>
+                  ))}
+                </TabPanel>
+              </TabContext>
+            </Box>
+          </ModalWrapper>
         </Box>
       </Box>
       <Box

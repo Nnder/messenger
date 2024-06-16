@@ -10,24 +10,25 @@ import { doc } from "firebase/firestore";
 import { useUserStore } from "../../5_entities/User/UserStore";
 import { db } from "../../6_shared/firebase/firebase";
 
-const defaultValues = {
-  createdAt: new Date(),
-  name: "",
-  updatedAt: new Date(),
-  lastMessage: "Чат создан",
-  users: [],
-  type: "chat",
-};
-
 export const ChatForm = ({ hide }: { hide: () => void }) => {
+  const { uid, ref } = useUserStore();
+
+  const defaultValues = {
+    createdAt: new Date(),
+    name: "",
+    updatedAt: new Date(),
+    lastMessage: "Чат создан",
+    users: [],
+    type: "chat",
+    owner: ref,
+  };
+
   const methods = useForm({ defaultValues: defaultValues });
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = methods;
-
-  const { uid } = useUserStore();
 
   const handle = async (data: FieldValues) => {
     // @ts-ignore

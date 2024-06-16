@@ -12,6 +12,7 @@ export interface IUser {
   username: string;
   status: UserStatus;
   provider: AuthProviders;
+  friends: IUser[];
 }
 
 export interface IUserStore extends IUser {

@@ -9,6 +9,7 @@ export const useUserStore = create<IUserStore>((set, get) => ({
   username: "",
   status: "offline",
   provider: "",
+  friends: [],
   setUser: (user: IUser) => set(() => ({ ...user })),
   getUser: () => {
     const data = get();
@@ -21,6 +22,7 @@ export const useUserStore = create<IUserStore>((set, get) => ({
       username: data.username,
       uid: data.uid,
       ref: data.ref,
+      friends: data.friends,
     } as IUser;
   },
 

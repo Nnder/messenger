@@ -14,6 +14,7 @@ import { db } from "../../6_shared/firebase/firebase";
 import { IChat } from "./Chat.types";
 import { IUser } from "../User/User.types";
 import toast from "react-hot-toast";
+import { fetchUsers } from "../User/User";
 
 export const createChat = async (params: Partial<IChat>) => {
   return await addDoc(collection(db, "chats"), params);
@@ -63,13 +64,17 @@ export const fetchChat = async (chatUID: string) => {
   try {
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
-      chat = { ...docSnap.data(), uid: docSnap.id } as IChat;
+      const data = await docSnap.data();
+      const chatUsers = await fetchUsers(data.users);
+      chat = { ...data, uid: docSnap.id, users: chatUsers } as IChat;
     } else {
       toast("Чат не найден");
     }
   } catch (e) {
     toast("Ошибка при получении чата");
   }
+
+  console.log("chatusers", chat);
 
   return chat;
 };
@@ -80,8 +85,10 @@ export const subscribeOnChat = async (
 ) => {
   const docRef = doc(db, "chats", chatUID);
 
-  const unsub = onSnapshot(docRef, (snapshot: any) => {
-    let chat: IChat = { ...snapshot.data(), uid: snapshot.id };
+  const unsub = onSnapshot(docRef, async (snapshot: any) => {
+    const data = await snapshot.data();
+    const chatUsers = await fetchUsers(data.users);
+    let chat: IChat = { ...data, uid: snapshot.id, users: chatUsers };
     callback(chat);
   });
 

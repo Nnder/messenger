@@ -19,6 +19,7 @@
     "@fontsource/roboto": "^5.0.13",
     "@gsap/react": "^2.1.1",
     "@mui/icons-material": "^5.15.15",
+    "@mui/lab": "^5.0.0-alpha.170",
     "@mui/material": "^5.15.15",
     "@mui/styled-engine-sc": "^6.0.0-alpha.18",
     "@supabase/supabase-js": "^2.42.7",

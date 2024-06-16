@@ -50,14 +50,16 @@ export const createMessage = async (
   const chatRef = await doc(db, "chats", params.chat);
   // @ts-ignore
   const ownerRef = await doc(db, "users", params.owner);
-  const date = new Date().getTime();
+  // const date = new Date().getTime();
   params.chat = chatRef;
   params.owner = ownerRef;
-  params.createdAt = {
-    seconds: Math.floor(Date.now() / 1000),
-    nanoseconds: date,
-  };
-  params.status = "new";
+  // params.createdAt = {
+  //   seconds: Math.floor(Date.now() / 1000),
+  //   nanoseconds: date,
+  // };
+  // @ts-ignore
+  params.createdAt = new Date();
+  params.status = "новое";
   updateChat(params.chat.id, {
     updatedAt: new Date(),
     lastMessage: params.text,

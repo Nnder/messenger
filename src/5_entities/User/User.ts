@@ -7,6 +7,8 @@ import {
   doc,
   getDoc,
   setDoc,
+  DocumentReference,
+  DocumentData,
 } from "firebase/firestore";
 import { db } from "../../6_shared/firebase/firebase";
 import { AuthProviders, IUser } from "./User.types";
@@ -29,13 +31,37 @@ export const fetchCurrentUser = async (
     where("provider", "==", AuthProvider),
   );
 
-  const data: any = [];
+  const data: any[] = [];
 
   const querySnapshot = await getDocs(queryUser);
-  querySnapshot.forEach((document) => {
-    const ref = doc(db, "users", document.id);
-    data.push({ ...document.data(), uid: document.id, ref: ref });
-  });
+
+  await Promise.all(
+    querySnapshot.docs.map(async (document) => {
+      const ref = doc(db, "users", document.id);
+      const user = document.data();
+
+      const friends: IUser[] = [];
+
+      // Изменения для получения данных о друзьях
+      await Promise.all(
+        user.friends.map(
+          async (friend: DocumentReference<DocumentData, DocumentData>) => {
+            const friendData = (await getDoc(friend)).data();
+            if (friendData)
+              friends.push({
+                ...friendData,
+                ref: friend,
+                uid: friend.id,
+              } as IUser);
+          },
+        ),
+      );
+
+      console.log("friends", friends);
+
+      data.push({ ...user, uid: document.id, ref: ref, friends });
+    }),
+  );
 
   if (data.length) return data[0];
 
@@ -46,6 +72,7 @@ export const fetchCurrentUser = async (
     username: email,
     email: email,
     provider: AuthProvider,
+    friends: [],
   };
 
   return await createUser(params);
@@ -55,6 +82,19 @@ export const fetchUser = async (uid: string) => {
   const userRef = doc(db, "users", uid);
   const user = (await getDoc(userRef)).data();
   return { ...user, uid };
+};
+
+export const fetchUsers = async (
+  users: DocumentReference<DocumentData, DocumentData>[],
+) => {
+  const data: IUser[] = [];
+  await Promise.all(
+    users.map(async (user: DocumentReference<DocumentData, DocumentData>) => {
+      const userData = (await getDoc(user)).data();
+      if (userData) data.push({ ...userData, ref: user } as IUser);
+    }),
+  );
+  return data;
 };
 
 export const updateUser = async (uid: string, params: Partial<IUser>) => {

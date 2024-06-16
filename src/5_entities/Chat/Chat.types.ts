@@ -1,3 +1,4 @@
+import { DocumentData, DocumentReference } from "firebase/firestore";
 import { IUser } from "../User/User.types";
 
 export interface IChatStore {
@@ -21,4 +22,5 @@ export interface IChat<T = firebaseDate> {
   notRead: number | null;
   users: IUser[];
   type: string;
+  owner: DocumentReference<DocumentData, DocumentData>;
 }
