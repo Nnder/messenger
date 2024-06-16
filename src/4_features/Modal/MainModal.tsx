@@ -1,11 +1,14 @@
 import { Box, Button, IconButton, Modal } from "@mui/material";
 import { useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
+import SettingsIcon from "@mui/icons-material/Settings";
 import logout from "../../6_shared/firebase/SignOut/SignOut";
 import { ChatForm } from "../Forms/CreateChat";
 import { ModalWrapper } from "./Modal";
+import { UserSettings } from "../Forms/UserSettings";
 
 export default function MainModal() {
+  const [userSettingsForm, setUserSettingsForm] = useState(false);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -42,6 +45,14 @@ export default function MainModal() {
         >
           <Box>
             <Box sx={{ mb: 1 }}>
+              <Button
+                variant="contained"
+                onClick={() => setUserSettingsForm(true)}
+              >
+                <SettingsIcon />
+              </Button>
+            </Box>
+            <Box sx={{ mb: 1 }}>
               <Button variant="contained" onClick={logout}>
                 Выйти
               </Button>
@@ -54,11 +65,33 @@ export default function MainModal() {
                 Создать чат
               </Button>
             </Box>
+            <Box sx={{ mb: 1 }}>
+              <Button
+                variant="contained"
+                onClick={() => handleChatCreateForm(true)}
+              >
+                Приглашения
+              </Button>
+            </Box>
             <Box>
               <ModalWrapper open={chatCreate} handle={handleChatCreateForm}>
                 <ChatForm
                   hide={() => {
                     setChatCreate(false);
+                    handleClose();
+                  }}
+                />
+              </ModalWrapper>
+            </Box>
+
+            <Box>
+              <ModalWrapper
+                open={userSettingsForm}
+                handle={(open) => setUserSettingsForm(open)}
+              >
+                <UserSettings
+                  hide={() => {
+                    setUserSettingsForm(false);
                     handleClose();
                   }}
                 />

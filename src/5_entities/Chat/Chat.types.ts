@@ -20,4 +20,5 @@ export interface IChat<T = firebaseDate> {
   name: string;
   notRead: number | null;
   users: IUser[];
+  type: string;
 }

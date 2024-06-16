@@ -5,21 +5,18 @@ import {
   FormProvider,
   useForm,
 } from "react-hook-form";
-import { createChat } from "../../5_entities/Chat/Chat";
-import { doc } from "firebase/firestore";
 import { useUserStore } from "../../5_entities/User/UserStore";
-import { db } from "../../6_shared/firebase/firebase";
+import { updateUser } from "../../5_entities/User/User";
+import { IUser } from "../../5_entities/User/User.types";
 
-const defaultValues = {
-  createdAt: new Date(),
-  name: "",
-  updatedAt: new Date(),
-  lastMessage: "Чат создан",
-  users: [],
-  type: "chat",
-};
+export const UserSettings = ({ hide }: { hide: () => void }) => {
+  const { username, getUser } = useUserStore();
+  const defaultValues = {
+    username,
+  };
 
-export const ChatForm = ({ hide }: { hide: () => void }) => {
+  const { uid, ref, ...user } = { ...getUser() };
+
   const methods = useForm({ defaultValues: defaultValues });
   const {
     control,
@@ -27,22 +24,21 @@ export const ChatForm = ({ hide }: { hide: () => void }) => {
     formState: { errors },
   } = methods;
 
-  const { uid } = useUserStore();
-
   const handle = async (data: FieldValues) => {
-    // @ts-ignore
-    const docRef = doc(db, "users", uid);
-    data.users.push(docRef);
-    createChat(data);
-    hide();
+    if (uid) {
+      const params = {
+        ...user,
+        username: data.username,
+      };
+      updateUser(uid, params as Partial<IUser>);
+      hide();
+    }
   };
 
   return (
     <Box
       sx={{
         backgroundColor: "primary.main",
-        maxWidth: 560,
-        maxHeight: 560,
       }}
     >
       <FormProvider {...methods}>
@@ -55,15 +51,15 @@ export const ChatForm = ({ hide }: { hide: () => void }) => {
           }}
         >
           <Controller
-            name="name"
+            name="username"
             control={control}
             rules={{ required: true }}
             render={({ field: { value, onChange } }) => (
               <TextField
                 variant="filled"
-                color={errors.name ? "error" : "secondary"}
+                color={errors.username ? "error" : "secondary"}
                 sx={{ width: 1, m: 1 }}
-                label="Название чата"
+                label="имя пользователя"
                 value={value}
                 onChange={onChange}
               />
@@ -76,7 +72,7 @@ export const ChatForm = ({ hide }: { hide: () => void }) => {
             variant="contained"
             onClick={handleSubmit((data) => handle(data))}
           >
-            Создать чат
+            Сохранить
           </Button>
         </div>
       </FormProvider>

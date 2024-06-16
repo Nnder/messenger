@@ -24,7 +24,6 @@ export default function AuthProvider({ ...props }: PropsWithChildren) {
         window.location.href = `${origin}/Sign`;
       }
     }
-    console.log(user);
 
     if (user && user.email && user.providerData) {
       console.log("Вы авторизованы");
@@ -35,6 +34,8 @@ export default function AuthProvider({ ...props }: PropsWithChildren) {
         setUser(userData);
 
         const user = getUser();
+
+        console.log("user", user);
 
         const onChatsChange = (chats: IChat[]) => {
           queryClient.setQueryData(["chats", user.uid], () => chats);
