@@ -13,6 +13,8 @@ import {
 import { db } from "../../6_shared/firebase/firebase";
 import { AuthProviders, IUser } from "./User.types";
 import toast from "react-hot-toast";
+import { createChat } from "../Chat/Chat";
+import { IChat } from "../Chat/Chat.types";
 
 const createUser = async (params: IUser) => {
   const user = await addDoc(collection(db, "users"), params);
@@ -78,10 +80,10 @@ export const fetchCurrentUser = async (
   return await createUser(params);
 };
 
-export const fetchUser = async (uid: string) => {
+export const fetchUser = async (uid: string): Promise<IUser> => {
   const userRef = doc(db, "users", uid);
   const user = (await getDoc(userRef)).data();
-  return { ...user, uid };
+  return { ...user, uid } as IUser;
 };
 
 export const fetchUsers = async (
@@ -110,5 +112,74 @@ export const updateUser = async (uid: string, params: Partial<IUser>) => {
   }
 
   console.log("update", user);
+  return user;
+};
+
+export const addToFriend = async (
+  userRef: DocumentReference<DocumentData, DocumentData>,
+  friendRef: DocumentReference<DocumentData, DocumentData>,
+) => {
+  const user = (await getDoc(userRef)).data() as IUser;
+  const friend = (await getDoc(friendRef)).data() as IUser;
+  try {
+    await setDoc(
+      userRef,
+      { ...user, friends: [...user.friends, friendRef] },
+      { merge: true },
+    );
+    await setDoc(
+      friendRef,
+      { ...friend, friends: [...friend.friends, userRef] },
+      { merge: true },
+    );
+    toast("Новый контакт");
+  } catch (e) {
+    toast("Ошибка при обновлении данных");
+  }
+
+  const chatParams: Partial<IChat<Date>> = {
+    createdAt: new Date(),
+    lastMessage: "",
+    type: "personal",
+    name: "personal",
+    updatedAt: new Date(),
+    //@ts-ignore
+    users: [userRef, friendRef],
+  };
+  createChat(chatParams);
+  return user;
+};
+
+export const addToFriendUID = async (userUid: string, friendUid: string) => {
+  const userRef = doc(db, "users", userUid);
+  const friendRef = doc(db, "users", friendUid);
+  const user = (await getDoc(userRef)).data() as IUser;
+  const friend = (await getDoc(friendRef)).data() as IUser;
+  try {
+    await setDoc(
+      userRef,
+      { ...user, friends: [...user.friends, friendRef] },
+      { merge: true },
+    );
+    await setDoc(
+      friendRef,
+      { ...friend, friends: [...friend.friends, userRef] },
+      { merge: true },
+    );
+    toast("Новый контакт");
+  } catch (e) {
+    toast("Ошибка при обновлении данных");
+  }
+
+  const chatParams: Partial<IChat<Date>> = {
+    createdAt: new Date(),
+    lastMessage: "",
+    type: "personal",
+    name: "personal",
+    updatedAt: new Date(),
+    //@ts-ignore
+    users: [userRef, friendRef],
+  };
+  createChat(chatParams);
   return user;
 };

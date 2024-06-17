@@ -1,20 +1,66 @@
-import { Box, Input } from "@mui/material";
+import { Box, Button, Input, Menu, MenuItem } from "@mui/material";
 import ButtonText from "../../6_shared/UI/Buttons/Folder/ButtonText";
 import ButtonFolder from "../../6_shared/UI/Buttons/Folder/ButtonFolder";
 import MainModal from "../../4_features/Modal/MainModal";
 import { ChatList } from "../../4_features/Chat/ChatList";
-// import { useTheme } from "@emotion/react";
+import { useRef, useState } from "react";
+import { fetchBySearch } from "../../5_entities/Search/Search";
+import { IUser } from "../../5_entities/User/User.types";
+import { IChat } from "../../5_entities/Chat/Chat.types";
+import AddIcon from "@mui/icons-material/Add";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import { useUserStore } from "../../5_entities/User/UserStore";
+import { IRequest, createRequest } from "../../5_entities/Request/Request";
+import { addUserToChat } from "../../5_entities/Chat/Chat";
+
+interface ISearch {
+  users?: IUser[];
+  chats?: IChat[];
+}
 
 export default function Navbar() {
-  // const theme = useTheme();
-  // const { uid, getUser } = useUserStore();
+  const [search, setSearch] = useState("");
+  const [data, setData] = useState<ISearch>({});
+  const inputSearch = useRef<HTMLInputElement | null>(null);
+  const { ref } = useUserStore();
 
-  // const queryClient = useQueryClient()
-  // const {data, isLoading, isFetched} = useQuery({ queryKey: ['chats', uid], queryFn: ()=>fetchChats(getUser()) })
+  const makeSearch = (search: string) => {
+    fetchBySearch(search).then((data) => {
+      setData(data);
+      handleSearch();
+    });
+  };
 
-  // if(isFetched && !isLoading){
-  //   console.log('query',data)
-  // }
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+
+  const handleSearch = () => {
+    if (inputSearch && inputSearch.current)
+      setTimeout(() => setAnchorEl(inputSearch.current), 2000);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const sendFriendRequest = (user: IUser) => {
+    if (user?.ref && ref) {
+      const request: IRequest = {
+        type: "personal",
+        from: ref,
+        to: user?.ref,
+        addTo: {
+          user: user?.ref,
+        },
+      };
+      console.log("works", request);
+      createRequest(request);
+    }
+  };
+
+  const enterChat = (chat: IChat) => {
+    if (chat?.uid && ref) addUserToChat(chat?.uid, ref);
+  };
 
   return (
     <Box
@@ -37,9 +83,76 @@ export default function Navbar() {
       >
         <MainModal />
         <Input
+          ref={inputSearch}
+          value={search}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            makeSearch(e.target.value);
+          }}
           placeholder="Поиск"
           sx={{ color: "#fff", mr: 1, width: "70%" }}
+          aria-controls={open ? "basic-menu" : undefined}
+          aria-expanded={open ? "true" : undefined}
+          aria-haspopup="true"
+          id="basic-button"
         />
+        <Box>
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            MenuListProps={{
+              "aria-labelledby": "basic-button",
+            }}
+            sx={{
+              maxHeight: "80vh",
+              minWidth: 200,
+            }}
+          >
+            {data?.users &&
+              data?.users.map((user: IUser, i: number) => (
+                <MenuItem
+                  key={user?.uid ? i + user?.uid : i + user.username}
+                  sx={{ minWidth: 200, width: "100%" }}
+                >
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
+                    @{user.username}
+                    <Button onClick={() => sendFriendRequest(user)}>
+                      <AddIcon />
+                    </Button>
+                  </Box>
+                </MenuItem>
+              ))}
+
+            {data?.chats &&
+              data?.chats.map((chat: IChat, i: number) => (
+                <MenuItem
+                  key={chat?.uid ? i + chat?.uid : i + chat.name}
+                  sx={{ minWidth: 200, width: "100%" }}
+                >
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
+                    Чат: {chat.name}
+                    <Button onClick={() => enterChat(chat)}>
+                      <ChevronRightIcon />
+                    </Button>
+                  </Box>
+                </MenuItem>
+              ))}
+          </Menu>
+        </Box>
       </Box>
       <Box
         sx={{
@@ -61,21 +174,6 @@ export default function Navbar() {
         >
           <ButtonFolder>Все чаты</ButtonFolder>
           <ButtonFolder>Личное</ButtonFolder>
-
-          <ButtonFolder>Все чаты</ButtonFolder>
-          <ButtonFolder>Личное</ButtonFolder>
-          <ButtonFolder>Все чаты</ButtonFolder>
-          <ButtonFolder>Личное</ButtonFolder>
-          <ButtonFolder>Все чаты</ButtonFolder>
-          <ButtonFolder>Личное</ButtonFolder>
-          <ButtonFolder>Все чаты</ButtonFolder>
-          <ButtonFolder>Личное</ButtonFolder>
-          <ButtonFolder>Все чаты</ButtonFolder>
-          <ButtonFolder>Личное</ButtonFolder>
-          <ButtonFolder>Все чаты</ButtonFolder>
-          <ButtonFolder>Личное</ButtonFolder>
-          <ButtonFolder>Все чаты</ButtonFolder>
-          <ButtonFolder>Личное</ButtonFolder>
         </Box>
 
         {/* Список чатов для мобилки */}
@@ -88,18 +186,6 @@ export default function Navbar() {
             overflow: "auto",
           }}
         >
-          <ButtonText>Все чаты</ButtonText>
-          <ButtonText>Личное</ButtonText>
-          <ButtonText>Все чаты</ButtonText>
-          <ButtonText>Личное</ButtonText>
-          <ButtonText>Все чаты</ButtonText>
-          <ButtonText>Личное</ButtonText>
-          <ButtonText>Все чаты</ButtonText>
-          <ButtonText>Личное</ButtonText>
-          <ButtonText>Все чаты</ButtonText>
-          <ButtonText>Личное</ButtonText>
-          <ButtonText>Все чаты</ButtonText>
-          <ButtonText>Личное</ButtonText>
           <ButtonText>Все чаты</ButtonText>
           <ButtonText>Личное</ButtonText>
         </Box>

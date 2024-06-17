@@ -18,7 +18,7 @@ import {
 export default function AuthProvider({ ...props }: PropsWithChildren) {
   const [user, loading, error] = useAuthState(auth);
   const queryClient = useQueryClient();
-  const { setUser, getUser, uid } = useUserStore();
+  const { setUser, getUser } = useUserStore();
   const { setRequests } = useRequestStore();
 
   if (error) toast("Ошибка пользователя");

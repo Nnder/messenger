@@ -142,7 +142,9 @@ export const Message = ({
             {date}
           </Typography>
 
-          <Typography>{message.status}</Typography>
+          <Typography>
+            {message.status == "новое" ? "" : message.status}
+          </Typography>
         </Box>
       </Box>
     </Box>

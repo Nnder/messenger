@@ -5,7 +5,6 @@ import {
   collection,
   deleteDoc,
   doc,
-  getDoc,
   onSnapshot,
   query,
   where,
@@ -49,23 +48,31 @@ export const subscribeOnRequests = async (
   callback: (requests: IRequestReady[]) => void,
 ) => {
   const docRef = await doc(db, "users", uid);
-  const to = await getDoc(docRef);
+  // const to = await getDoc(docRef);
   const queryChats = query(
     collection(db, "requests"),
     where("to", "==", docRef),
   );
 
-  const unsub = onSnapshot(queryChats, async (snapshot: any) => {
+  const unsub = await onSnapshot(queryChats, async (snapshot: any) => {
     const requests: IRequestReady[] = [];
     await Promise.all(
       snapshot.docs.map(async (doc: any) => {
         const d = await doc.data();
         const from = await fetchUser(d.from.id);
+        const to = await fetchUser(d.to.id);
         const addTo =
           d.type == "chat"
             ? { chat: await fetchChat(d.addTo.chat.id) }
             : { user: await fetchUser(d.addTo.user.id) };
-        requests.push({ ...d, uid: doc.id, ref: doc, from, to, addTo });
+        requests.push({
+          ...d,
+          uid: doc.id,
+          ref: doc,
+          from: { ...from, ref: d.from },
+          to: { ...to, ref: d.to },
+          addTo,
+        });
       }),
     );
 

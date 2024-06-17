@@ -11,6 +11,8 @@ import toast from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
 import { useUserStore } from "../../5_entities/User/UserStore";
 import { IRequestReady, deleteRequest } from "../../5_entities/Request/Request";
+import { addUserToChat } from "../../5_entities/Chat/Chat";
+import { addToFriend } from "../../5_entities/User/User";
 
 export default function MainModal() {
   const [requestCount, setRequestCount] = useState(0);
@@ -50,6 +52,26 @@ export default function MainModal() {
 
   const deleteUserRequest = (request: IRequestReady) => {
     deleteRequest(request.uid || "");
+  };
+
+  const acceptUserRequest = (request: IRequestReady) => {
+    if (request.type == "chat") {
+      if (request.to?.ref)
+        addUserToChat(
+          request.addTo.chat?.uid ? request.addTo.chat?.uid : "",
+          request.to?.ref,
+        );
+      deleteUserRequest(request);
+    } else {
+      if (request.from?.ref && request.to?.ref) {
+        console.log("aaa", request);
+        addToFriend(request.from?.ref, request.to?.ref).then(() =>
+          deleteUserRequest(request),
+        );
+      } else {
+        toast("Ошибка");
+      }
+    }
   };
 
   return (
@@ -160,7 +182,12 @@ export default function MainModal() {
                           )}
                           <Typography>От: {request.from.email}</Typography>
                           <Box>
-                            <Button sx={{ width: "50%" }}>Принять</Button>
+                            <Button
+                              sx={{ width: "50%" }}
+                              onClick={() => acceptUserRequest(request)}
+                            >
+                              Принять
+                            </Button>
                             <Button
                               sx={{ width: "50%" }}
                               onClick={() => deleteUserRequest(request)}

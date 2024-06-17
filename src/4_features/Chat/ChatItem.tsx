@@ -1,18 +1,39 @@
 import { Box, Button, ButtonProps, Typography } from "@mui/material";
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IChat } from "../../5_entities/Chat/Chat.types";
 import { lastMessageTime } from "../../6_shared/helpers/lastMessageTime";
+import { fetchUser } from "../../5_entities/User/User";
 
 export default function ChatItem({
   children,
   href,
   chat,
+  chatType,
+  userID,
   ...props
-}: PropsWithChildren<ButtonProps & { chat: IChat }>) {
+}: PropsWithChildren<
+  ButtonProps & { chat: IChat; chatType: string; userID: string }
+>) {
   const navigate = useNavigate();
-  const Unread = "+100";
+  // const Unread = "+100";
   const date = lastMessageTime(chat.updatedAt.seconds);
+  const [username, setUsername] = useState("");
+
+  const getUserName = async (chat: IChat) => {
+    console.log("chatInfoPersonal", chat.users[0].uid == userID);
+    // @ts-ignore
+    const user =
+      chat.users[0].id == userID
+        ? await fetchUser(chat.users[1].id)
+        : await fetchUser(chat.users[0].id);
+    return user.username;
+  };
+
+  useEffect(() => {
+    if (chatType == "personal")
+      getUserName(chat).then((username) => setUsername(username));
+  }, [userID]);
 
   return (
     <Button
@@ -53,7 +74,7 @@ export default function ChatItem({
               overflowWrap: "anywhere",
             }}
           >
-            {chat.name}
+            {chatType == "chat" ? chat.name : username}
           </Typography>
 
           <Typography sx={{ fontSize: 11 }}>{date}</Typography>
@@ -91,7 +112,7 @@ export default function ChatItem({
               px: 0.5,
             }}
           >
-            {Unread}
+            {/* {Unread} */}
           </Typography>
         </Box>
 

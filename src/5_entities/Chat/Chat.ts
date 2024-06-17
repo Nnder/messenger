@@ -1,4 +1,6 @@
 import {
+  DocumentData,
+  DocumentReference,
   addDoc,
   collection,
   doc,
@@ -16,7 +18,7 @@ import { IUser } from "../User/User.types";
 import toast from "react-hot-toast";
 import { fetchUsers } from "../User/User";
 
-export const createChat = async (params: Partial<IChat>) => {
+export const createChat = async (params: Partial<IChat<Date>>) => {
   return await addDoc(collection(db, "chats"), params);
 };
 
@@ -115,6 +117,26 @@ export const updateChat = async (
 
   try {
     await setDoc(docRef, { ...params }, { merge: true });
+    chat = (await getDoc(docRef)).data() as IChat;
+  } catch (e) {
+    toast("Ошибка при обновлении чата");
+  }
+
+  return chat;
+};
+
+export const addUserToChat = async (
+  chatUID: string,
+  userRef: DocumentReference<DocumentData, DocumentData>,
+) => {
+  const docRef = doc(db, "chats", chatUID);
+  let chat: IChat = (await getDoc(docRef)).data() as IChat;
+  try {
+    await setDoc(
+      docRef,
+      { ...chat, users: [...chat.users, userRef] },
+      { merge: true },
+    );
     chat = (await getDoc(docRef)).data() as IChat;
   } catch (e) {
     toast("Ошибка при обновлении чата");
