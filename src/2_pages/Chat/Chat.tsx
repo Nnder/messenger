@@ -29,6 +29,7 @@ import TabPanel from "@mui/lab/TabPanel";
 import { updateChat } from "../../5_entities/Chat/Chat";
 import { IChat } from "../../5_entities/Chat/Chat.types";
 import { IRequest, createRequest } from "../../5_entities/Request/Request";
+import { useNavbarStore } from "../../5_entities/Mobile/MobileStore";
 
 // categories={
 //           [
@@ -62,6 +63,9 @@ export const Chat = () => {
   const { uid, friends, ref } = useUserStore();
   const textRef = useRef<HTMLInputElement | null>(null);
   const { removeMsg, setNewMessage, editMessage } = useChangeMessageStore();
+
+  const { showNabar, setNavbar } = useNavbarStore();
+  const [show, setShow] = useState(showNabar);
 
   const filterUsers = () => {
     const filter: IUser[] = [];
@@ -110,7 +114,15 @@ export const Chat = () => {
       },
     );
 
+    const unsub = useNavbarStore.subscribe(
+      (state) => state.showNabar,
+      (showNabar: boolean) => {
+        setShow(showNabar);
+      },
+    );
+
     return () => {
+      unsub();
       unsubEdit();
       unsubNew();
     };
@@ -221,14 +233,26 @@ export const Chat = () => {
   };
 
   if (!isFetched) return;
-  <Box>
+  <Box
+    sx={{
+      display: {
+        xs: show ? "none" : "inherit",
+        sm: show ? "none" : "inherit",
+        md: "inherit",
+      },
+    }}
+  >
     <PageLoader />
   </Box>;
 
   return (
     <Box
       sx={{
-        display: "flex",
+        display: {
+          xs: show ? "none" : "flex",
+          sm: show ? "none" : "flex",
+          md: "flex",
+        },
         flexDirection: "column",
       }}
     >
@@ -242,7 +266,12 @@ export const Chat = () => {
           borderBottom: "2px solid gray",
         }}
       >
-        <Button onClick={() => navigate(-1)}>
+        <Button
+          onClick={() => {
+            setNavbar(true);
+            navigate(-1);
+          }}
+        >
           <ArrowBackIcon />
         </Button>
         <Box>

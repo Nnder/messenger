@@ -5,6 +5,7 @@ import { Chat } from "../2_pages/Chat/Chat";
 import MainPage from "../2_pages/MainPage";
 import NotFound from "../2_pages/Error/NotFound";
 import { Box, Typography } from "@mui/material";
+import { useState } from "react";
 
 const Root = () => {
   return (

@@ -3,7 +3,7 @@ import ButtonText from "../../6_shared/UI/Buttons/Folder/ButtonText";
 import ButtonFolder from "../../6_shared/UI/Buttons/Folder/ButtonFolder";
 import MainModal from "../../4_features/Modal/MainModal";
 import { ChatList } from "../../4_features/Chat/ChatList";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { fetchBySearch } from "../../5_entities/Search/Search";
 import { IUser } from "../../5_entities/User/User.types";
 import { IChat } from "../../5_entities/Chat/Chat.types";
@@ -12,6 +12,7 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { useUserStore } from "../../5_entities/User/UserStore";
 import { IRequest, createRequest } from "../../5_entities/Request/Request";
 import { addUserToChat } from "../../5_entities/Chat/Chat";
+import { useNavbarStore } from "../../5_entities/Mobile/MobileStore";
 
 interface ISearch {
   users?: IUser[];
@@ -62,6 +63,18 @@ export default function Navbar() {
     if (chat?.uid && ref) addUserToChat(chat?.uid, ref);
   };
 
+  const [show, setShow] = useState(true);
+
+  useEffect(() => {
+    const unsub = useNavbarStore.subscribe(
+      (state) => state.showNabar,
+      (showNabar: boolean) => {
+        setShow(showNabar);
+      },
+    );
+    return () => unsub();
+  }, []);
+
   return (
     <Box
       sx={{
@@ -69,7 +82,11 @@ export default function Navbar() {
         maxWidth: { xs: "100vw", md: "500px" },
         background: "black",
         height: "100vh",
-        display: "grid",
+        display: {
+          xs: show ? "grid" : "none",
+          sm: show ? "grid" : "none",
+          md: "grid",
+        },
         gridTemplateRows: "56px 1fr",
         position: { xs: "absolute", sm: "initial" },
       }}

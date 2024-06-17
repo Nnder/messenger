@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { IChat } from "../../5_entities/Chat/Chat.types";
 import { lastMessageTime } from "../../6_shared/helpers/lastMessageTime";
 import { fetchUser } from "../../5_entities/User/User";
+import { useNavbarStore } from "../../5_entities/Mobile/MobileStore";
 
 export default function ChatItem({
   children,
@@ -19,14 +20,17 @@ export default function ChatItem({
   // const Unread = "+100";
   const date = lastMessageTime(chat.updatedAt.seconds);
   const [username, setUsername] = useState("");
+  const { setNavbar } = useNavbarStore();
 
   const getUserName = async (chat: IChat) => {
     console.log("chatInfoPersonal", chat.users[0].uid == userID);
-    // @ts-ignore
     const user =
+      // @ts-ignore
       chat.users[0].id == userID
-        ? await fetchUser(chat.users[1].id)
-        : await fetchUser(chat.users[0].id);
+        ? // @ts-ignore
+          await fetchUser(chat.users[1].id)
+        : // @ts-ignore
+          await fetchUser(chat.users[0].id);
     return user.username;
   };
 
@@ -38,6 +42,7 @@ export default function ChatItem({
   return (
     <Button
       onClick={() => {
+        setNavbar(false);
         navigate("/");
         navigate(href || "");
       }}
