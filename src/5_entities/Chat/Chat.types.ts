@@ -23,4 +23,5 @@ export interface IChat<T = firebaseDate> {
   users: IUser[];
   type: string;
   owner: DocumentReference<DocumentData, DocumentData>;
+  ref?: DocumentReference<DocumentData, DocumentData>;
 }

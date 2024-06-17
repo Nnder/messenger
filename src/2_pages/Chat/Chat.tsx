@@ -28,6 +28,7 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import { updateChat } from "../../5_entities/Chat/Chat";
 import { IChat } from "../../5_entities/Chat/Chat.types";
+import { IRequest, createRequest } from "../../5_entities/Request/Request";
 
 // categories={
 //           [
@@ -58,7 +59,7 @@ export const Chat = () => {
   const navigate = useNavigate();
   let { chatId } = useParams();
   const { data, isFetched } = useGetChat(chatId || "");
-  const { uid, friends } = useUserStore();
+  const { uid, friends, ref } = useUserStore();
   const textRef = useRef<HTMLInputElement | null>(null);
   const { removeMsg, setNewMessage, editMessage } = useChangeMessageStore();
 
@@ -193,14 +194,30 @@ export const Chat = () => {
     updateChat(chatId ? chatId : "", params);
   };
 
-  const addUser = (ref: DocumentReference<DocumentData, DocumentData>) => {
-    const users: DocumentReference<DocumentData, DocumentData>[] = [];
-    data?.users.map((user) => {
-      // @ts-ignore
-      users.push(user.ref);
-    });
+  const addUser = (userRef: DocumentReference<DocumentData, DocumentData>) => {
+    console.log("chatData", data);
+    if (data?.ref && ref) {
+      const request: IRequest = {
+        type: "chat",
+        from: ref,
+        to: userRef,
+        addTo: {
+          chat: data?.ref,
+        },
+      };
+      createRequest(request);
+      toast("Запрос отправлен");
+    } else {
+      toast("Ошибка при добавлении пользователя");
+    }
+
+    // const users: DocumentReference<DocumentData, DocumentData>[] = [];
+    // data?.users.map((user) => {
+    //   // @ts-ignore
+    //   users.push(user.ref);
+    // });
     // @ts-ignore
-    updateChat(chatId ? chatId : "", { users: [...users, ref] });
+    // updateChat(chatId ? chatId : "", { users: [...users, ref] });
   };
 
   if (!isFetched) return;

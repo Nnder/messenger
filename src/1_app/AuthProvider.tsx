@@ -9,11 +9,17 @@ import { useQueryClient } from "@tanstack/react-query";
 import { IChat } from "../5_entities/Chat/Chat.types";
 import { subscribeOnChats } from "../5_entities/Chat/Chat";
 import PageLoader from "../6_shared/UI/Loaders/PageLoader";
+import { useRequestStore } from "../5_entities/Request/RequestStore";
+import {
+  IRequestReady,
+  subscribeOnRequests,
+} from "../5_entities/Request/Request";
 
 export default function AuthProvider({ ...props }: PropsWithChildren) {
   const [user, loading, error] = useAuthState(auth);
   const queryClient = useQueryClient();
-  const { setUser, getUser } = useUserStore();
+  const { setUser, getUser, uid } = useUserStore();
+  const { setRequests } = useRequestStore();
 
   if (error) toast("Ошибка пользователя");
 
@@ -25,7 +31,7 @@ export default function AuthProvider({ ...props }: PropsWithChildren) {
       }
     }
 
-    if (user && user.email && user.providerData) {
+    if (user && user.email && user.providerData && user.uid) {
       console.log("Вы авторизованы");
       fetchCurrentUser(
         user?.email,
@@ -42,6 +48,15 @@ export default function AuthProvider({ ...props }: PropsWithChildren) {
         };
 
         subscribeOnChats(user, onChatsChange);
+
+        const onRequestChange = (request: IRequestReady[]) => {
+          queryClient.setQueryData(["requests", user.uid], () => {
+            setRequests(request);
+            return request;
+          });
+        };
+
+        subscribeOnRequests(user?.uid || "", onRequestChange);
       });
     } else {
       console.log("Вы не авторизованы");

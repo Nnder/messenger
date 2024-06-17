@@ -66,7 +66,12 @@ export const fetchChat = async (chatUID: string) => {
     if (docSnap.exists()) {
       const data = await docSnap.data();
       const chatUsers = await fetchUsers(data.users);
-      chat = { ...data, uid: docSnap.id, users: chatUsers } as IChat;
+      chat = {
+        ...data,
+        uid: docSnap.id,
+        users: chatUsers,
+        ref: docRef,
+      } as IChat;
     } else {
       toast("Чат не найден");
     }
@@ -88,7 +93,12 @@ export const subscribeOnChat = async (
   const unsub = onSnapshot(docRef, async (snapshot: any) => {
     const data = await snapshot.data();
     const chatUsers = await fetchUsers(data.users);
-    let chat: IChat = { ...data, uid: snapshot.id, users: chatUsers };
+    let chat: IChat = {
+      ...data,
+      uid: snapshot.id,
+      users: chatUsers,
+      ref: docRef,
+    };
     callback(chat);
   });
 
