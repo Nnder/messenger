@@ -63,7 +63,8 @@ export default function Navbar() {
     if (chat?.uid && ref) addUserToChat(chat?.uid, ref);
   };
 
-  const [show, setShow] = useState(true);
+  const { showNabar } = useNavbarStore();
+  const [show, setShow] = useState(showNabar);
 
   useEffect(() => {
     const unsub = useNavbarStore.subscribe(
