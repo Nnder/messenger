@@ -13,6 +13,7 @@ export interface IUser {
   status: UserStatus;
   provider: AuthProviders;
   friends: IUser[];
+  friendCount: number;
 }
 
 export interface IUserStore extends IUser {

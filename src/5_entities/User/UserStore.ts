@@ -10,6 +10,7 @@ export const useUserStore = create<IUserStore>((set, get) => ({
   status: "offline",
   provider: "",
   friends: [],
+  friendCount: 0,
   setUser: (user: IUser) => set(() => ({ ...user })),
   getUser: () => {
     const data = get();

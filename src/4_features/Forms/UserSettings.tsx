@@ -10,12 +10,12 @@ import { updateUser } from "../../5_entities/User/User";
 import { IUser } from "../../5_entities/User/User.types";
 
 export const UserSettings = ({ hide }: { hide: () => void }) => {
-  const { username, getUser } = useUserStore();
+  const { username, getUser, setUser } = useUserStore();
   const defaultValues = {
     username,
   };
 
-  const { uid, ref, ...user } = { ...getUser() };
+  const { uid, ref } = { ...getUser() };
 
   const methods = useForm({ defaultValues: defaultValues });
   const {
@@ -27,10 +27,12 @@ export const UserSettings = ({ hide }: { hide: () => void }) => {
   const handle = async (data: FieldValues) => {
     if (uid) {
       const params = {
-        ...user,
         username: data.username,
       };
-      updateUser(uid, params as Partial<IUser>);
+      if (ref)
+        updateUser(ref, params as Partial<IUser>).then((user) =>
+          setUser(user as IUser),
+        );
       hide();
     }
   };

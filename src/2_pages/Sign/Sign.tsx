@@ -16,7 +16,7 @@ export default function Sign() {
 
   if (error) toast("Ошибка пользователя");
 
-  if (!loading && user) navigate("/");
+  if (!loading && user?.email) navigate("/");
 
   return (
     <Box

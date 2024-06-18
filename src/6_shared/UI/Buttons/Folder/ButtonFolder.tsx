@@ -14,7 +14,7 @@ export default function ButtonFolder({
         py: 1,
         m: 0,
         width: 1,
-        fontSize: 13,
+        fontSize: { md: 10, lg: 11, xl: 12 },
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",

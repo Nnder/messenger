@@ -61,7 +61,13 @@ export const fetchCurrentUser = async (
 
       console.log("friends", friends);
 
-      data.push({ ...user, uid: document.id, ref: ref, friends });
+      data.push({
+        ...user,
+        uid: document.id,
+        ref: ref,
+        friends,
+        friendCount: user.friendCount,
+      });
     }),
   );
 
@@ -75,6 +81,7 @@ export const fetchCurrentUser = async (
     email: email,
     provider: AuthProvider,
     friends: [],
+    friendCount: 0,
   };
 
   return await createUser(params);
@@ -99,10 +106,11 @@ export const fetchUsers = async (
   return data;
 };
 
-export const updateUser = async (uid: string, params: Partial<IUser>) => {
-  const docRef = doc(db, "users", uid);
-
-  let user: Partial<IUser> = {};
+export const updateUser = async (
+  docRef: DocumentReference<DocumentData, DocumentData>,
+  params: Partial<IUser>,
+) => {
+  let user: IUser = (await getDoc(docRef)).data() as IUser;
 
   try {
     await setDoc(docRef, { ...params }, { merge: true });
@@ -124,12 +132,20 @@ export const addToFriend = async (
   try {
     await setDoc(
       userRef,
-      { ...user, friends: [...user.friends, friendRef] },
+      {
+        ...user,
+        friends: [...user.friends, friendRef],
+        friendCount: user.friendCount + 1,
+      },
       { merge: true },
     );
     await setDoc(
       friendRef,
-      { ...friend, friends: [...friend.friends, userRef] },
+      {
+        ...friend,
+        friends: [...friend.friends, userRef],
+        friendCount: friend.friendCount + 1,
+      },
       { merge: true },
     );
     toast("Новый контакт");
@@ -139,10 +155,11 @@ export const addToFriend = async (
 
   const chatParams: Partial<IChat<Date>> = {
     createdAt: new Date(),
-    lastMessage: "",
+    lastMessage: "Чат Создан",
     type: "personal",
     name: "personal",
     updatedAt: new Date(),
+
     //@ts-ignore
     users: [userRef, friendRef],
   };

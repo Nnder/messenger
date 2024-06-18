@@ -3,18 +3,20 @@ import { db } from "../../6_shared/firebase/firebase";
 import { IUser } from "../User/User.types";
 import { IChat } from "../Chat/Chat.types";
 
-export const fetchBySearch = async (searchByName: string) => {
+export const fetchBySearch = async (searchByName: string, user: IUser) => {
   const queryChats = await query(
     collection(db, "chats"),
     where("type", "==", "chat"),
     where("name", ">=", searchByName.toUpperCase()),
     where("name", "<=", searchByName.toLowerCase() + "\uf8ff"),
+    where("owner", "!=", user?.ref),
   );
 
   const queryUsers = await query(
     collection(db, "users"),
     where("username", ">=", searchByName.toUpperCase()),
     where("username", "<=", searchByName.toLowerCase() + "\uf8ff"),
+    where("email", "!=", user.email),
   );
 
   const chats: IChat[] = [];

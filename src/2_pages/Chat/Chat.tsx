@@ -237,7 +237,7 @@ export const Chat = () => {
     sx={{
       display: {
         xs: show ? "none" : "inherit",
-        sm: show ? "none" : "inherit",
+        sm: "inherit",
         md: "inherit",
       },
     }}
@@ -250,7 +250,7 @@ export const Chat = () => {
       sx={{
         display: {
           xs: show ? "none" : "flex",
-          sm: show ? "none" : "flex",
+          sm: "flex",
           md: "flex",
         },
         flexDirection: "column",

@@ -23,13 +23,14 @@ export default function Navbar() {
   const [search, setSearch] = useState("");
   const [data, setData] = useState<ISearch>({});
   const inputSearch = useRef<HTMLInputElement | null>(null);
-  const { ref } = useUserStore();
+  const { ref, getUser } = useUserStore();
 
   const makeSearch = (search: string) => {
-    fetchBySearch(search).then((data) => {
-      setData(data);
-      handleSearch();
-    });
+    if (!!search)
+      fetchBySearch(search, getUser()).then((data) => {
+        setData(data);
+        handleSearch();
+      });
   };
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -37,7 +38,7 @@ export default function Navbar() {
 
   const handleSearch = () => {
     if (inputSearch && inputSearch.current)
-      setTimeout(() => setAnchorEl(inputSearch.current), 2000);
+      setTimeout(() => setAnchorEl(inputSearch.current), 1000);
   };
 
   const handleClose = () => {
@@ -85,7 +86,7 @@ export default function Navbar() {
         height: "100vh",
         display: {
           xs: show ? "grid" : "none",
-          sm: show ? "grid" : "none",
+          sm: "grid",
           md: "grid",
         },
         gridTemplateRows: "56px 1fr",
@@ -139,11 +140,12 @@ export default function Navbar() {
                       display: "flex",
                       justifyContent: "space-between",
                       alignItems: "center",
+                      width: "100%",
                     }}
                   >
                     @{user.username}
                     <Button onClick={() => sendFriendRequest(user)}>
-                      <AddIcon />
+                      <AddIcon sx={{ color: "black" }} />
                     </Button>
                   </Box>
                 </MenuItem>
@@ -160,11 +162,12 @@ export default function Navbar() {
                       display: "flex",
                       justifyContent: "space-between",
                       alignItems: "center",
+                      width: "100%",
                     }}
                   >
-                    Чат: {chat.name}
+                    <Box>Чат: {chat.name}</Box>
                     <Button onClick={() => enterChat(chat)}>
-                      <ChevronRightIcon />
+                      <ChevronRightIcon sx={{ color: "black" }} />
                     </Button>
                   </Box>
                 </MenuItem>
