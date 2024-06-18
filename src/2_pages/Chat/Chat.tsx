@@ -26,7 +26,11 @@ import { ModalWrapper } from "../../4_features/Modal/Modal";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import { removeUserFromChat, updateChat } from "../../5_entities/Chat/Chat";
+import {
+  addUserToChat,
+  removeUserFromChat,
+  updateChat,
+} from "../../5_entities/Chat/Chat";
 import { IChat } from "../../5_entities/Chat/Chat.types";
 import { IRequest, createRequest } from "../../5_entities/Request/Request";
 import { useNavbarStore } from "../../5_entities/Mobile/MobileStore";
@@ -46,6 +50,7 @@ import { useNavbarStore } from "../../5_entities/Mobile/MobileStore";
 
 export const Chat = () => {
   const [value, setValue] = useState("0");
+  const [inChat, setInChat] = useState(false);
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     console.log(event);
@@ -85,7 +90,13 @@ export const Chat = () => {
   };
 
   useEffect(() => {
-    if (friends && data?.users) setUserFriends(filterUsers());
+    if (friends && data?.users && isFetched) {
+      setUserFriends(filterUsers());
+      const has = data.users.find((user) => {
+        return user?.ref?.id === uid;
+      });
+      setInChat(!!has);
+    }
   }, [friends, data?.users]);
 
   useEffect(() => {
@@ -244,6 +255,10 @@ export const Chat = () => {
     toast("Вы покинули чат");
   };
 
+  const joinToChat = () => {
+    if (chatId && ref) addUserToChat(chatId, ref);
+  };
+
   if (!isFetched) return;
   <Box
     sx={{
@@ -287,7 +302,11 @@ export const Chat = () => {
           <ArrowBackIcon />
         </Button>
         <Box>
-          <Button onClick={() => data?.type == "chat" && setShowChatInfo(true)}>
+          <Button
+            onClick={() =>
+              data?.type == "chat" && setShowChatInfo(true && inChat)
+            }
+          >
             <Typography>{data?.name}</Typography>
           </Button>
 
@@ -475,34 +494,48 @@ export const Chat = () => {
             width: 1,
           }}
         >
-          <TextField
-            inputRef={textRef}
-            sx={{ flexGrow: 1, "& fieldset": { border: "none" } }}
-            size="medium"
-            placeholder="Написать сообщение ..."
-            multiline={true}
-          />
-          <Box
-            sx={{
-              display: edit ? "flex" : "none",
-            }}
-          >
+          {inChat ? (
+            <>
+              <TextField
+                inputRef={textRef}
+                sx={{ flexGrow: 1, "& fieldset": { border: "none" } }}
+                size="medium"
+                placeholder="Написать сообщение ..."
+                multiline={true}
+              />
+              <Box
+                sx={{
+                  display: edit ? "flex" : "none",
+                }}
+              >
+                <Button
+                  onClick={() => {
+                    removeMsg();
+                    setEdit(false);
+                    if (textRef && textRef.current) textRef.current.value = "";
+                  }}
+                >
+                  <CloseIcon sx={{ fontSize: 35 }} />
+                </Button>
+              </Box>
+              <Button onClick={() => setEmojiPanel((prev) => !prev)}>
+                <EmojiEmotionsIcon sx={{ fontSize: 35 }} />
+              </Button>
+              <Button onClick={edit ? editNewMessage : sendMessage}>
+                <SendIcon sx={{ fontSize: 35 }} />
+              </Button>
+            </>
+          ) : (
             <Button
-              onClick={() => {
-                removeMsg();
-                setEdit(false);
-                if (textRef && textRef.current) textRef.current.value = "";
+              sx={{
+                width: 1,
+                height: 56,
               }}
+              onClick={() => joinToChat()}
             >
-              <CloseIcon sx={{ fontSize: 35 }} />
+              Присоединиться к чату
             </Button>
-          </Box>
-          <Button onClick={() => setEmojiPanel((prev) => !prev)}>
-            <EmojiEmotionsIcon sx={{ fontSize: 35 }} />
-          </Button>
-          <Button onClick={edit ? editNewMessage : sendMessage}>
-            <SendIcon sx={{ fontSize: 35 }} />
-          </Button>
+          )}
         </Box>
       </Box>
     </Box>
