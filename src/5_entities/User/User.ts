@@ -9,6 +9,8 @@ import {
   setDoc,
   DocumentReference,
   DocumentData,
+  onSnapshot,
+  DocumentSnapshot,
 } from "firebase/firestore";
 import { db } from "../../6_shared/firebase/firebase";
 import { AuthProviders, IUser } from "./User.types";
@@ -85,6 +87,50 @@ export const fetchCurrentUser = async (
   };
 
   return await createUser(params);
+};
+
+export const subscribeOnUser = async (
+  uid: string,
+  callback: (user: IUser) => void,
+) => {
+  const docRef = doc(db, "users", uid);
+
+  const unsub = onSnapshot(
+    docRef,
+    async (snapshot: DocumentSnapshot<DocumentData>) => {
+      const data = await snapshot.data();
+
+      const friends: IUser[] = [];
+
+      // Изменения для получения данных о друзьях
+      await Promise.all(
+        data?.friends.map(
+          async (friendRef: DocumentReference<DocumentData>) => {
+            const friendSnapshot = await getDoc(friendRef);
+            const friendData = friendSnapshot.data();
+            if (friendData) {
+              friends.push({
+                ...friendData,
+                ref: friendRef,
+                uid: friendSnapshot.id,
+              } as IUser);
+            }
+          },
+        ),
+      );
+
+      let readyUser: IUser = {
+        ...(data as IUser),
+        uid: snapshot.id,
+        ref: docRef,
+        friends,
+      };
+      console.log(readyUser);
+      callback(readyUser);
+    },
+  );
+
+  return unsub;
 };
 
 export const fetchUser = async (uid: string): Promise<IUser> => {

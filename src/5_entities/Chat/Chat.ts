@@ -48,7 +48,7 @@ export const subscribeOnChats = async (
     orderBy("updatedAt", "desc"),
   );
 
-  onSnapshot(queryChats, (snapshot: any) => {
+  const unsub = onSnapshot(queryChats, (snapshot: any) => {
     const chats: IChat[] = [];
     snapshot.forEach((doc: any) => {
       chats.push({ ...doc.data(), uid: doc.id });
@@ -56,6 +56,7 @@ export const subscribeOnChats = async (
 
     callback(chats);
   });
+  return unsub;
 };
 
 export const fetchChat = async (chatUID: string) => {
