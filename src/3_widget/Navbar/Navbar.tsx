@@ -13,6 +13,7 @@ import { useUserStore } from "../../5_entities/User/UserStore";
 import { IRequest, createRequest } from "../../5_entities/Request/Request";
 import { addUserToChat } from "../../5_entities/Chat/Chat";
 import { useNavbarStore } from "../../5_entities/Mobile/MobileStore";
+import { useFolderStore } from "../../5_entities/Folder/Folder";
 
 interface ISearch {
   users?: IUser[];
@@ -24,6 +25,7 @@ export default function Navbar() {
   const [data, setData] = useState<ISearch>({});
   const inputSearch = useRef<HTMLInputElement | null>(null);
   const { ref, getUser } = useUserStore();
+  const { setType, setFilterdChats } = useFolderStore();
 
   const makeSearch = (search: string) => {
     if (!!search)
@@ -74,7 +76,19 @@ export default function Navbar() {
         setShow(showNabar);
       },
     );
-    return () => unsub();
+
+    const unsubFolder = useFolderStore.subscribe(
+      (state) => state.folderType,
+      (folderType: string) => {
+        console.log("filtered chats", folderType);
+        setFilterdChats();
+      },
+    );
+
+    return () => {
+      unsub();
+      unsubFolder();
+    };
   }, []);
 
   return (
@@ -193,8 +207,30 @@ export default function Navbar() {
             overflow: "auto",
           }}
         >
-          <ButtonFolder>Все чаты</ButtonFolder>
-          <ButtonFolder>Личное</ButtonFolder>
+          <ButtonFolder
+            onClick={() => {
+              setType("all");
+              setFilterdChats();
+            }}
+          >
+            Все
+          </ButtonFolder>
+          <ButtonFolder
+            onClick={() => {
+              setType("chat");
+              setFilterdChats();
+            }}
+          >
+            Чаты
+          </ButtonFolder>
+          <ButtonFolder
+            onClick={() => {
+              setType("personal");
+              setFilterdChats();
+            }}
+          >
+            Личное
+          </ButtonFolder>
         </Box>
 
         {/* Список чатов для мобилки */}
@@ -207,8 +243,30 @@ export default function Navbar() {
             overflow: "auto",
           }}
         >
-          <ButtonText>Все чаты</ButtonText>
-          <ButtonText>Личное</ButtonText>
+          <ButtonText
+            onClick={() => {
+              setType("all");
+              setFilterdChats();
+            }}
+          >
+            Все
+          </ButtonText>
+          <ButtonText
+            onClick={() => {
+              setType("chat");
+              setFilterdChats();
+            }}
+          >
+            Чаты
+          </ButtonText>
+          <ButtonText
+            onClick={() => {
+              setType("personal");
+              setFilterdChats();
+            }}
+          >
+            Личное
+          </ButtonText>
         </Box>
 
         <Box

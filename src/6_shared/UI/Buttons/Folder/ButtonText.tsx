@@ -1,7 +1,10 @@
-import { Button } from "@mui/material";
+import { Button, ButtonProps } from "@mui/material";
 import { PropsWithChildren } from "react";
 
-export default function ButtonText({ children, ...props }: PropsWithChildren) {
+export default function ButtonText({
+  children,
+  ...props
+}: PropsWithChildren<ButtonProps>) {
   return (
     <Button
       variant="contained"

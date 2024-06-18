@@ -14,12 +14,14 @@ import {
   IRequestReady,
   subscribeOnRequests,
 } from "../5_entities/Request/Request";
+import { useFolderStore } from "../5_entities/Folder/Folder";
 
 export default function AuthProvider({ ...props }: PropsWithChildren) {
   const [user, loading, error] = useAuthState(auth);
   const queryClient = useQueryClient();
   const { setUser, getUser } = useUserStore();
   const { setRequests } = useRequestStore();
+  const { setChats, setFilterdChats } = useFolderStore();
 
   if (error) toast("Ошибка пользователя");
 
@@ -52,6 +54,8 @@ export default function AuthProvider({ ...props }: PropsWithChildren) {
 
         const onChatsChange = (chats: IChat[]) => {
           queryClient.setQueryData(["chats", user.uid], () => chats);
+          setChats(chats);
+          setFilterdChats();
         };
 
         const unsubChats = subscribeOnChats(user, onChatsChange);

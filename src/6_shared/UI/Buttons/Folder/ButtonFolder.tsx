@@ -1,11 +1,11 @@
 import { Folder } from "@mui/icons-material";
-import { Button } from "@mui/material";
+import { Button, ButtonProps } from "@mui/material";
 import { PropsWithChildren } from "react";
 
 export default function ButtonFolder({
   children,
   ...props
-}: PropsWithChildren) {
+}: PropsWithChildren<ButtonProps>) {
   return (
     <Button
       variant="contained"

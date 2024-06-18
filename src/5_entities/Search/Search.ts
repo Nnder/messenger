@@ -19,8 +19,8 @@ export const fetchBySearch = async (searchByName: string, user: IUser) => {
     where("email", "!=", user.email),
   );
 
-  const chats: IChat[] = [];
-  const users: IUser[] = [];
+  let chats: IChat[] = [];
+  let users: IUser[] = [];
 
   const querySnapshot = await getDocs(queryChats);
   querySnapshot.forEach((doc) => {
@@ -30,6 +30,16 @@ export const fetchBySearch = async (searchByName: string, user: IUser) => {
   const querySnapshotUsers = await getDocs(queryUsers);
   querySnapshotUsers.forEach((doc) => {
     users.push({ ...doc.data(), uid: doc.id, ref: doc.ref } as IUser);
+  });
+
+  chats = chats.filter((chat: IChat) => {
+    const name = chat.name.toLowerCase();
+    return name.includes(searchByName.toLowerCase());
+  });
+
+  users = users.filter((user: IUser) => {
+    const name = user.username.toLowerCase();
+    return name.includes(searchByName.toLowerCase());
   });
 
   return { chats, users };
