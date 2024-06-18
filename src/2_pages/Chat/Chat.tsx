@@ -26,7 +26,7 @@ import { ModalWrapper } from "../../4_features/Modal/Modal";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import { updateChat } from "../../5_entities/Chat/Chat";
+import { removeUserFromChat, updateChat } from "../../5_entities/Chat/Chat";
 import { IChat } from "../../5_entities/Chat/Chat.types";
 import { IRequest, createRequest } from "../../5_entities/Request/Request";
 import { useNavbarStore } from "../../5_entities/Mobile/MobileStore";
@@ -232,6 +232,18 @@ export const Chat = () => {
     // updateChat(chatId ? chatId : "", { users: [...users, ref] });
   };
 
+  const copyChatLink = async () => {
+    await navigator.clipboard.writeText(window.location.href);
+    toast("Ссылка скопирована");
+  };
+
+  const exitFromChat = () => {
+    removeUserFromChat(chatId || "", uid || "");
+    setNavbar(true);
+    navigate(-1);
+    toast("Вы покинули чат");
+  };
+
   if (!isFetched) return;
   <Box
     sx={{
@@ -299,6 +311,44 @@ export const Chat = () => {
             >
               <TabContext value={value}>
                 <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      flexDirection: "column",
+                    }}
+                  >
+                    <Button
+                      onClick={() => copyChatLink()}
+                      variant="contained"
+                      sx={{
+                        width: 1,
+                        m: 1,
+                        WebkitBoxShadow:
+                          "0px 0px 10px 2px rgba(247, 247, 247, 0.2)",
+                        MozBoxShadow:
+                          "0px 0px 10px 2px rgba(247, 247, 247, 0.2)",
+                        boxShadow: "0px 0px 10px 2px rgba(247, 247, 247, 0.2)",
+                      }}
+                    >
+                      Скопировать ссылку приглашение
+                    </Button>
+                    <Button
+                      onClick={() => exitFromChat()}
+                      variant="contained"
+                      sx={{
+                        width: 1,
+                        m: 1,
+                        WebkitBoxShadow:
+                          "0px 0px 10px 2px rgba(236, 19, 19, 0.2)",
+                        MozBoxShadow: "0px 0px 10px 2px rgba(236, 19, 19, 0.2)",
+                        boxShadow: "0px 0px 10px 2px rgba(236, 19, 19, 0.2)",
+                      }}
+                    >
+                      Выйти из чата
+                    </Button>
+                  </Box>
                   <TabList
                     onChange={handleChange}
                     aria-label="lab API tabs example"

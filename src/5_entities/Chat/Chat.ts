@@ -126,6 +126,26 @@ export const updateChat = async (
   return chat;
 };
 
+export const removeUserFromChat = async (chatUID: string, userUID: string) => {
+  const docRef = doc(db, "chats", chatUID);
+  const userRef = doc(db, "users", userUID);
+
+  let chat = (await getDoc(docRef)).data();
+  let users: any[] = chat?.users.filter(
+    (user: DocumentReference<DocumentData, DocumentData>) =>
+      user.id !== userRef.id,
+  );
+
+  try {
+    await setDoc(docRef, { users }, { merge: true });
+    chat = (await getDoc(docRef)).data() as IChat;
+  } catch (e) {
+    toast("Ошибка при обновлении чата");
+  }
+
+  return chat;
+};
+
 export const addUserToChat = async (
   chatUID: string,
   userRef: DocumentReference<DocumentData, DocumentData>,
