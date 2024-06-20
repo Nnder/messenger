@@ -25,7 +25,7 @@ export default function Navbar() {
   const [data, setData] = useState<ISearch>({});
   const inputSearch = useRef<HTMLInputElement | null>(null);
   const { ref, getUser } = useUserStore();
-  const { setType, setFilterdChats } = useFolderStore();
+  const { setType, setFilterdChats, folderType } = useFolderStore();
 
   const makeSearch = (search: string) => {
     if (!!search)
@@ -208,6 +208,9 @@ export default function Navbar() {
           }}
         >
           <ButtonFolder
+            background={
+              folderType && folderType === "all" ? "#000000" : "inherit"
+            }
             onClick={() => {
               setType("all");
               setFilterdChats();
@@ -216,6 +219,9 @@ export default function Navbar() {
             Все
           </ButtonFolder>
           <ButtonFolder
+            background={
+              folderType && folderType === "chat" ? "#000000" : "inherit"
+            }
             onClick={() => {
               setType("chat");
               setFilterdChats();
@@ -224,6 +230,9 @@ export default function Navbar() {
             Чаты
           </ButtonFolder>
           <ButtonFolder
+            background={
+              folderType && folderType === "personal" ? "#000000" : "inherit"
+            }
             onClick={() => {
               setType("personal");
               setFilterdChats();
@@ -244,6 +253,9 @@ export default function Navbar() {
           }}
         >
           <ButtonText
+            background={
+              folderType && folderType === "all" ? "#000000" : "inherit"
+            }
             onClick={() => {
               setType("all");
               setFilterdChats();
@@ -252,6 +264,9 @@ export default function Navbar() {
             Все
           </ButtonText>
           <ButtonText
+            background={
+              folderType && folderType === "chat" ? "#000000" : "inherit"
+            }
             onClick={() => {
               setType("chat");
               setFilterdChats();
@@ -260,6 +275,9 @@ export default function Navbar() {
             Чаты
           </ButtonText>
           <ButtonText
+            background={
+              folderType && folderType === "personal" ? "#000000" : "inherit"
+            }
             onClick={() => {
               setType("personal");
               setFilterdChats();

@@ -500,7 +500,7 @@ export const Chat = () => {
                 inputRef={textRef}
                 sx={{ flexGrow: 1, "& fieldset": { border: "none" } }}
                 size="medium"
-                placeholder="Написать сообщение ..."
+                placeholder="Сообщение..."
                 multiline={true}
               />
               <Box

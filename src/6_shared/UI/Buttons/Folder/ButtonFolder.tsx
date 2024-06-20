@@ -4,8 +4,9 @@ import { PropsWithChildren } from "react";
 
 export default function ButtonFolder({
   children,
+  background,
   ...props
-}: PropsWithChildren<ButtonProps>) {
+}: PropsWithChildren<ButtonProps & { background: string }>) {
   return (
     <Button
       variant="contained"
@@ -21,6 +22,7 @@ export default function ButtonFolder({
         alignItems: "center",
         textAlign: "center",
         textTransform: "none",
+        background: background,
       }}
       {...props}
     >

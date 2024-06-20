@@ -3,8 +3,9 @@ import { PropsWithChildren } from "react";
 
 export default function ButtonText({
   children,
+  background,
   ...props
-}: PropsWithChildren<ButtonProps>) {
+}: PropsWithChildren<ButtonProps & { background: string }>) {
   return (
     <Button
       variant="contained"
@@ -20,6 +21,7 @@ export default function ButtonText({
         justifyContent: "center",
         alignItems: "center",
         textTransform: "none",
+        background: background,
       }}
       {...props}
     >

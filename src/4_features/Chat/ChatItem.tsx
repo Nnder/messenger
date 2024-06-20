@@ -1,6 +1,6 @@
 import { Box, Button, ButtonProps, Typography } from "@mui/material";
 import { PropsWithChildren, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { IChat } from "../../5_entities/Chat/Chat.types";
 import { lastMessageTime } from "../../6_shared/helpers/lastMessageTime";
 import { fetchUser } from "../../5_entities/User/User";
@@ -21,6 +21,8 @@ export default function ChatItem({
   const date = lastMessageTime(chat.updatedAt.seconds);
   const [username, setUsername] = useState("");
   const { setNavbar } = useNavbarStore();
+
+  let { chatId } = useParams();
 
   const getUserName = async (chat: IChat) => {
     console.log("chatInfoPersonal", chat.users[0].uid == userID);
@@ -47,7 +49,12 @@ export default function ChatItem({
         navigate(href || "");
       }}
       variant="contained"
-      sx={{ width: 1, borderRadius: 0, px: 1 }}
+      sx={{
+        width: 1,
+        borderRadius: 0,
+        px: 1,
+        background: chatId && chatId === chat.uid ? "#000000" : "inherit",
+      }}
       {...props}
     >
       <Box
