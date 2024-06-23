@@ -1,12 +1,12 @@
 import { Box, Button, ButtonProps, Typography } from "@mui/material";
-import { PropsWithChildren, useEffect, useState } from "react";
+import { PropsWithChildren, memo, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { IChat } from "../../5_entities/Chat/Chat.types";
 import { lastMessageTime } from "../../6_shared/helpers/lastMessageTime";
 import { fetchUser } from "../../5_entities/User/User";
 import { useNavbarStore } from "../../5_entities/Mobile/MobileStore";
 
-export default function ChatItem({
+export default memo(function ChatItem({
   children,
   href,
   chat,
@@ -132,4 +132,4 @@ export default function ChatItem({
       </Box>
     </Button>
   );
-}
+});

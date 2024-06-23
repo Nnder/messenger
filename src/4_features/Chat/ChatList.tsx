@@ -8,8 +8,9 @@ import { useFolderStore } from "../../5_entities/Folder/Folder";
 import { useEffect, useState } from "react";
 
 export const ChatList = () => {
-  const { isLoading, isFetched } = useGetChats();
+  const { data, isFetched } = useGetChats();
   const { uid } = useUserStore();
+  const { setChats, setFilterdChats } = useFolderStore();
 
   const [folderChats, setFolderChats] = useState<IChat[]>([]);
 
@@ -27,16 +28,25 @@ export const ChatList = () => {
     };
   }, []);
 
-  if (isFetched && !isLoading) {
+  useEffect(() => {
+    if (data) {
+      setChats([...data]);
+      setFilterdChats();
+    }
+  }, [data]);
+
+  console.log("errors chats", folderChats, data);
+
+  if (isFetched && uid) {
     return (
       <>
         {folderChats?.map((chat: IChat) => (
           <ChatItem
-            key={chat.uid}
+            key={`${chat.uid}-item`}
             href={`chats/${chat.uid}`}
             chat={chat}
             chatType={chat?.type}
-            userID={uid || ""}
+            userID={uid}
           />
         ))}
       </>

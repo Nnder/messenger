@@ -64,7 +64,7 @@ export default function MainProvider({ children }: PropsWithChildren) {
       <Toaster position="top-right" />
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={theme}>
-          <AuthProvider>
+          <AuthProvider key={"authProvider"}>
             <Box
               sx={{
                 display: { xs: "block", sm: "grid" },

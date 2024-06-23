@@ -75,7 +75,7 @@ export default function SignUpForm() {
             variant="contained"
             onClick={handleSubmit((data) => handle(data))}
           >
-            Зарегестрироваться
+            Зарегистрироваться
           </Button>
         </div>
       </FormProvider>

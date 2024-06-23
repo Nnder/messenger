@@ -3,7 +3,7 @@ import ButtonText from "../../6_shared/UI/Buttons/Folder/ButtonText";
 import ButtonFolder from "../../6_shared/UI/Buttons/Folder/ButtonFolder";
 import MainModal from "../../4_features/Modal/MainModal";
 import { ChatList } from "../../4_features/Chat/ChatList";
-import { useEffect, useRef, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { fetchBySearch } from "../../5_entities/Search/Search";
 import { IUser } from "../../5_entities/User/User.types";
 import { IChat } from "../../5_entities/Chat/Chat.types";
@@ -20,7 +20,7 @@ interface ISearch {
   chats?: IChat[];
 }
 
-export default function Navbar() {
+export default memo(function Navbar() {
   const [search, setSearch] = useState("");
   const [data, setData] = useState<ISearch>({});
   const inputSearch = useRef<HTMLInputElement | null>(null);
@@ -47,8 +47,9 @@ export default function Navbar() {
     setAnchorEl(null);
   };
 
-  const sendFriendRequest = (user: IUser) => {
+  const sendFriendRequest = (user: IUser, e: any) => {
     if (user?.ref && ref) {
+      e.target.disabled = true;
       const request: IRequest = {
         type: "personal",
         from: ref,
@@ -158,7 +159,7 @@ export default function Navbar() {
                     }}
                   >
                     @{user.username}
-                    <Button onClick={() => sendFriendRequest(user)}>
+                    <Button onClick={(e) => sendFriendRequest(user, e)}>
                       <AddIcon sx={{ color: "black" }} />
                     </Button>
                   </Box>
@@ -180,7 +181,12 @@ export default function Navbar() {
                     }}
                   >
                     <Box>Чат: {chat.name}</Box>
-                    <Button onClick={() => enterChat(chat)}>
+                    <Button
+                      onClick={(e: any) => {
+                        e.target.disabled = true;
+                        enterChat(chat);
+                      }}
+                    >
                       <ChevronRightIcon sx={{ color: "black" }} />
                     </Button>
                   </Box>
@@ -205,6 +211,8 @@ export default function Navbar() {
             borderRight: "1px solid #353535",
             height: "calc(100vh - 56px)",
             overflow: "auto",
+            overflowX: "hidden",
+            scrollbarWidth: "thin",
           }}
         >
           <ButtonFolder
@@ -250,6 +258,7 @@ export default function Navbar() {
             background: "#201E1F",
             height: "56px",
             overflow: "auto",
+            scrollbarWidth: "thin",
           }}
         >
           <ButtonText
@@ -296,11 +305,13 @@ export default function Navbar() {
               md: "calc(100vh - 56px)",
             },
             overflow: "auto",
+            scrollbarWidth: "thin",
           }}
+          key="chatList"
         >
           <ChatList />
         </Box>
       </Box>
     </Box>
   );
-}
+});

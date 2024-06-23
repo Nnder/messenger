@@ -4,7 +4,6 @@ import Navbar from "../3_widget/Navbar/Navbar";
 import { Chat } from "../2_pages/Chat/Chat";
 import MainPage from "../2_pages/MainPage";
 import NotFound from "../2_pages/Error/NotFound";
-import { Box, Typography } from "@mui/material";
 
 const Root = () => {
   return (
@@ -21,20 +20,20 @@ const router = createBrowserRouter([
     element: <Root />,
     errorElement: <NotFound />,
     caseSensitive: true,
-    children: [
-      {
-        path: "/chats",
-        element: (
-          <Box>
-            <Typography>Выберите чат</Typography>
-          </Box>
-        ),
-      },
-      {
-        path: "/chats/:chatId",
-        element: <Chat />,
-      },
-    ],
+    // children: [
+    //   {
+    //     path: "/chats",
+    //     element: (
+    //       <Box>
+    //         <Typography>Выберите чат</Typography>
+    //       </Box>
+    //     ),
+    //   },
+    //   {
+    //     path: "/chats/:chatId",
+    //     element: <Chat />,
+    //   },
+    // ],
   },
   {
     path: "/chats/:chatId",
