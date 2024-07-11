@@ -72,6 +72,8 @@ export const Chat = () => {
   const { showNabar, setNavbar } = useNavbarStore();
   const [show, setShow] = useState(showNabar);
 
+  const wrapperMessages = useRef<null | HTMLDivElement>();
+
   const filterUsers = () => {
     const filter: IUser[] = [];
     friends.forEach((friend) => {
@@ -132,6 +134,14 @@ export const Chat = () => {
       },
     );
 
+    if (wrapperMessages.current) {
+      console.log(wrapperMessages.current?.scrollHeight);
+      wrapperMessages.current.scrollTo(
+        0,
+        wrapperMessages.current?.scrollHeight,
+      );
+    }
+
     return () => {
       unsub();
       unsubEdit();
@@ -140,6 +150,15 @@ export const Chat = () => {
   }, []);
 
   const messages = useGetMessages(chatId || "");
+  useEffect(() => {
+    if (wrapperMessages.current) {
+      console.log(wrapperMessages.current?.scrollHeight);
+      wrapperMessages.current.scrollTo(
+        0,
+        wrapperMessages.current?.scrollHeight,
+      );
+    }
+  }, [messages]);
   console.log("messages", messages.data);
 
   console.log("loader data", data);
@@ -177,6 +196,14 @@ export const Chat = () => {
       }
     } else {
       toast("Произошла ошибка при отправке сообщения");
+    }
+
+    if (wrapperMessages.current) {
+      console.log(wrapperMessages.current?.scrollHeight);
+      wrapperMessages.current.scrollTo(
+        0,
+        wrapperMessages.current?.scrollHeight,
+      );
     }
   };
 
@@ -436,6 +463,7 @@ export const Chat = () => {
           </ModalWrapper>
         </Box>
       </Box>
+
       <Box
         sx={{
           display: "flex",
@@ -444,6 +472,7 @@ export const Chat = () => {
           overflow: "auto",
           height: "calc(100vh - 56px - 38px)",
         }}
+        ref={wrapperMessages}
       >
         {messages.data?.map(
           (

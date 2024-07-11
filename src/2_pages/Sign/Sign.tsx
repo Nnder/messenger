@@ -1,6 +1,6 @@
 import { Box, Button } from "@mui/material";
 import SignInForm from "../../4_features/Forms/SignIn";
-import { SignInWith } from "../../4_features/SignInwith/SignInWith";
+// import { SignInWith } from "../../4_features/SignInwith/SignInWith";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { getAuth } from "firebase/auth";
 import SignUpForm from "../../4_features/Forms/SignUp";
@@ -47,7 +47,7 @@ export default function Sign() {
         >
           {login ? "Регистрация" : "Вход"}
         </Button>
-        <SignInWith />
+        {/* <SignInWith /> */}
       </Box>
     </Box>
   );
