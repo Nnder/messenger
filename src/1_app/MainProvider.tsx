@@ -1,7 +1,7 @@
 import { Box, ThemeProvider, createTheme } from "@mui/material";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "react-hot-toast";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+// import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import AuthProvider from "./AuthProvider";
 import { PropsWithChildren } from "react";
 
@@ -50,6 +50,13 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           color: "#fff",
+        },
+      },
+    },
+    MuiTypography: {
+      styleOverrides: {
+        root: {
+          textTransform: "none",
         },
       },
     },

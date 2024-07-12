@@ -326,6 +326,7 @@ export const Chat = () => {
   return (
     <Box
       sx={{
+        maxHeight: "100vh",
         display: {
           xs: show ? "none" : "flex",
           sm: "flex",
@@ -496,7 +497,7 @@ export const Chat = () => {
           flexDirection: "column",
           flexGrow: 1,
           overflow: "auto",
-          height: "calc(100vh - 56px - 38px)",
+          maxHeight: "calc(100vh - 56px - 38px)",
         }}
         ref={wrapperMessages}
       >
