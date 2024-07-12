@@ -13,7 +13,7 @@ import {
   updateMessage,
   useGetMessages,
 } from "../../5_entities/Message/Message";
-import { useEffect, useRef, useState } from "react";
+import { KeyboardEvent, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { useUserStore } from "../../5_entities/User/UserStore";
 import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
@@ -74,7 +74,8 @@ export const Chat = () => {
   const { showNabar, setNavbar } = useNavbarStore();
   const [show, setShow] = useState(showNabar);
 
-  const wrapperMessages = useRef<null | HTMLDivElement>();
+  const wrapperMessages = useRef<null | HTMLDivElement>(null);
+  const sendButtonRef = useRef<null | HTMLButtonElement>(null);
 
   const filterUsers = () => {
     const filter: IUser[] = [];
@@ -144,10 +145,23 @@ export const Chat = () => {
       );
     }
 
+    function pressEnter(e: KeyboardEvent) {
+      if (e.key === "Enter" && !e.ctrlKey) {
+        e.preventDefault();
+
+        sendButtonRef.current?.click();
+      }
+    }
+
+    //@ts-ignore
+    window.addEventListener("keyup", pressEnter);
+
     return () => {
       unsub();
       unsubEdit();
       unsubNew();
+      //@ts-ignore
+      window.removeEventListener("keyup", pressEnter);
     };
   }, []);
 
@@ -543,6 +557,17 @@ export const Chat = () => {
                 size="medium"
                 placeholder="Сообщение..."
                 multiline={true}
+                onKeyPress={(e: any) => {
+                  console.log(e);
+
+                  if (e.code === "Enter" && e.ctrlKey) {
+                    e.target.value += "\n";
+                  } else if (e.code === "Enter") {
+                    e.preventDefault();
+                  } else {
+                    e.target.value += e.key;
+                  }
+                }}
               />
               <Box
                 sx={{
@@ -563,6 +588,7 @@ export const Chat = () => {
                 <EmojiEmotionsIcon sx={{ fontSize: 35 }} />
               </Button>
               <Button
+                ref={sendButtonRef}
                 onClick={edit ? editNewMessage : sendMessage}
                 disabled={sended}
               >
