@@ -41,7 +41,7 @@ export default function Sign() {
       >
         {login ? <SignInForm /> : <SignUpForm />}
         <Button
-          sx={{ width: 1, mb: 1 }}
+          sx={{ width: 1, my: 2 }}
           variant="contained"
           onClick={() => setLogin((prev) => !prev)}
         >

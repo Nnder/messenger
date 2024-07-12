@@ -27,7 +27,7 @@ export default function SignInForm() {
   };
 
   return (
-    <Box sx={{ m: 1, width: "1" }}>
+    <Box sx={{ my: 1, width: "1", p: 1, background: "#333" }}>
       <FormProvider {...methods}>
         <div
           style={{

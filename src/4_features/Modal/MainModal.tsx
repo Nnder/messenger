@@ -157,6 +157,11 @@ export default function MainModal() {
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
+                    flexWrap: "wrap",
+                    maxWidth: "600px",
+                    overflow: "auto",
+                    maxHeight: 600,
+                    height: "90%",
                   }}
                 >
                   {query.data && query.data.length
