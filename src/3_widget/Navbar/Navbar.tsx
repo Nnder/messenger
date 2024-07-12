@@ -14,6 +14,7 @@ import { IRequest, createRequest } from "../../5_entities/Request/Request";
 import { addUserToChat } from "../../5_entities/Chat/Chat";
 import { useNavbarStore } from "../../5_entities/Mobile/MobileStore";
 import { useFolderStore } from "../../5_entities/Folder/Folder";
+import once from "../../6_shared/helpers/onceClick";
 
 interface ISearch {
   users?: IUser[];
@@ -159,7 +160,7 @@ export default memo(function Navbar() {
                     }}
                   >
                     @{user.username}
-                    <Button onClick={(e) => sendFriendRequest(user, e)}>
+                    <Button onClick={(e) => once(sendFriendRequest)(user, e)}>
                       <AddIcon sx={{ color: "black" }} />
                     </Button>
                   </Box>
@@ -184,7 +185,7 @@ export default memo(function Navbar() {
                     <Button
                       onClick={(e: any) => {
                         e.target.disabled = true;
-                        enterChat(chat);
+                        once(enterChat)(chat);
                       }}
                     >
                       <ChevronRightIcon sx={{ color: "black" }} />

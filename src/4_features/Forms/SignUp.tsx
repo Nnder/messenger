@@ -6,6 +6,7 @@ import {
   FormProvider,
   useForm,
 } from "react-hook-form";
+import once from "../../6_shared/helpers/onceClick";
 
 const defaultValues = {
   created_at: new Date(),
@@ -73,7 +74,7 @@ export default function SignUpForm() {
           <Button
             sx={{ width: 1 }}
             variant="contained"
-            onClick={handleSubmit((data) => handle(data))}
+            onClick={handleSubmit((data) => once(handle)(data))}
           >
             Зарегистрироваться
           </Button>

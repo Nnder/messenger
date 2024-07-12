@@ -34,6 +34,7 @@ import {
 import { IChat } from "../../5_entities/Chat/Chat.types";
 import { IRequest, createRequest } from "../../5_entities/Request/Request";
 import { useNavbarStore } from "../../5_entities/Mobile/MobileStore";
+import once from "../../6_shared/helpers/onceClick";
 
 // categories={
 //           [
@@ -51,6 +52,7 @@ import { useNavbarStore } from "../../5_entities/Mobile/MobileStore";
 export const Chat = () => {
   const [value, setValue] = useState("0");
   const [inChat, setInChat] = useState(false);
+  const [sended, setSended] = useState(false);
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     console.log(event);
@@ -164,9 +166,11 @@ export const Chat = () => {
   console.log("loader data", data);
 
   const sendMessage = async () => {
+    setSended(true);
     if (uid && chatId) {
       if (!textRef || !textRef.current) {
         toast("Введите сообщение");
+        setSended(false);
         return;
       }
 
@@ -174,6 +178,7 @@ export const Chat = () => {
 
       if (!messageText.trim()) {
         toast("Сообщение не может быть пустым");
+        setSended(false);
         return;
       }
 
@@ -188,7 +193,7 @@ export const Chat = () => {
       };
 
       try {
-        await createMessage(params);
+        await createMessage(params).then(() => setSended(false));
         toast("Сообщение отправлено");
         textRef.current.value = "";
       } catch (error) {
@@ -196,6 +201,7 @@ export const Chat = () => {
       }
     } else {
       toast("Произошла ошибка при отправке сообщения");
+      setSended(false);
     }
 
     if (wrapperMessages.current) {
@@ -208,8 +214,10 @@ export const Chat = () => {
   };
 
   const editNewMessage = async () => {
+    setSended(true);
     if (!textRef || !textRef.current) {
       toast("Введите сообщение");
+      setSended(false);
       return;
     }
 
@@ -217,12 +225,14 @@ export const Chat = () => {
 
     if (!messageText.trim()) {
       toast("Сообщение не может быть пустым");
+      setSended(false);
       return;
     }
 
     const newMessage = { ...editMessage };
     newMessage.text = messageText;
     setNewMessage(newMessage);
+    setSended(false);
   };
 
   const emojiHendler = ({ emoji }: EmojiClickData) => {
@@ -381,7 +391,7 @@ export const Chat = () => {
                       Скопировать ссылку приглашение
                     </Button>
                     <Button
-                      onClick={() => exitFromChat()}
+                      onClick={() => once(exitFromChat)()}
                       variant="contained"
                       sx={{
                         width: 1,
@@ -430,7 +440,9 @@ export const Chat = () => {
                       <Typography>{u.email}</Typography>
                       {data.owner?.id == uid && (
                         <Button
-                          onClick={() => removeUser(u?.ref ? u?.ref.id : "")}
+                          onClick={() =>
+                            once(removeUser)(u?.ref ? u?.ref.id : "")
+                          }
                         >
                           <CloseIcon />
                         </Button>
@@ -450,7 +462,7 @@ export const Chat = () => {
                       {friend.username}
                       <Button
                         onClick={() => {
-                          if (friend?.ref) addUser(friend?.ref);
+                          if (friend?.ref) once(addUser)(friend?.ref);
                         }}
                       >
                         <AddIcon />
@@ -550,7 +562,10 @@ export const Chat = () => {
               <Button onClick={() => setEmojiPanel((prev) => !prev)}>
                 <EmojiEmotionsIcon sx={{ fontSize: 35 }} />
               </Button>
-              <Button onClick={edit ? editNewMessage : sendMessage}>
+              <Button
+                onClick={edit ? editNewMessage : sendMessage}
+                disabled={sended}
+              >
                 <SendIcon sx={{ fontSize: 35 }} />
               </Button>
             </>
@@ -560,7 +575,7 @@ export const Chat = () => {
                 width: 1,
                 height: 56,
               }}
-              onClick={() => joinToChat()}
+              onClick={() => once(joinToChat)()}
             >
               Присоединиться к чату
             </Button>

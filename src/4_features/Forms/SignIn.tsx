@@ -6,6 +6,7 @@ import {
   FormProvider,
   useForm,
 } from "react-hook-form";
+import once from "../../6_shared/helpers/onceClick";
 
 const defaultValues = {
   created_at: new Date(),
@@ -22,7 +23,7 @@ export default function SignInForm() {
   } = methods;
 
   const handle = async (data: FieldValues) => {
-    SignInWithData(data.email, data.password);
+    once(SignInWithData)(data.email, data.password);
   };
 
   return (

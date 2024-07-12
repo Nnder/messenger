@@ -9,6 +9,7 @@ import { createChat } from "../../5_entities/Chat/Chat";
 import { doc } from "firebase/firestore";
 import { useUserStore } from "../../5_entities/User/UserStore";
 import { db } from "../../6_shared/firebase/firebase";
+import once from "../../6_shared/helpers/onceClick";
 
 export const ChatForm = ({ hide }: { hide: () => void }) => {
   const { uid, ref } = useUserStore();
@@ -34,7 +35,7 @@ export const ChatForm = ({ hide }: { hide: () => void }) => {
     // @ts-ignore
     const docRef = doc(db, "users", uid);
     data.users.push(docRef);
-    createChat(data);
+    once(createChat)(data);
     hide();
   };
 

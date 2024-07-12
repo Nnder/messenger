@@ -8,6 +8,7 @@ import {
 import { useUserStore } from "../../5_entities/User/UserStore";
 import { updateUser } from "../../5_entities/User/User";
 import { IUser } from "../../5_entities/User/User.types";
+import once from "../../6_shared/helpers/onceClick";
 
 export const UserSettings = ({ hide }: { hide: () => void }) => {
   const { username, getUser, setUser } = useUserStore();
@@ -72,7 +73,7 @@ export const UserSettings = ({ hide }: { hide: () => void }) => {
           <Button
             sx={{ width: 1 }}
             variant="contained"
-            onClick={handleSubmit((data) => handle(data))}
+            onClick={handleSubmit((data) => once(handle)(data))}
           >
             Сохранить
           </Button>

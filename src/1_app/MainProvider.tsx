@@ -75,7 +75,7 @@ export default function MainProvider({ children }: PropsWithChildren) {
             </Box>
           </AuthProvider>
         </ThemeProvider>
-        <ReactQueryDevtools initialIsOpen={false} />
+        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       </QueryClientProvider>
     </>
   );
